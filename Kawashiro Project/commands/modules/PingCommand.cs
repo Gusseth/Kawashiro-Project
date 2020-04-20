@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Kawashiro_Project.commands.modules
 {
-    public class Ping : ModuleBase<SocketCommandContext>
+    public class PingCommand : ModuleBase<SocketCommandContext>
     {
         [Command("Ping")]
-        public async Task PingCommand()
+        public async Task Ping()
         {
             await ReplyAsync("Pong!");
         }

@@ -86,5 +86,10 @@ namespace Kawashiro_Project
                 await Debug.Log(new LogMessage(LogSeverity.Critical, "login", "This program has spectacularly failed on startup:", e));
             }
         }
+
+        public static async Task Say(IMessageChannel channel, string msg)
+        {
+            await channel.SendMessageAsync(msg);
+        }
     }
 }
