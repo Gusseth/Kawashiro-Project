@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Kawashiro_Project.util;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -17,7 +18,7 @@ namespace Kawashiro_Project.commands
         protected readonly DiscordSocketClient client;          // Client singleton
         protected readonly IServiceProvider serviceProvider;    // IServiceProvider singleton
 
-        public CommandHandler(CommandService commandService, DiscordSocketClient client, IServiceProvider serviceProvider, int argPosition = 1)
+        public CommandHandler(CommandService commandService, DiscordSocketClient client, IServiceProvider serviceProvider, int argPosition = 0)
         {
             this.commandService = commandService;
             this.client = client;
@@ -31,19 +32,34 @@ namespace Kawashiro_Project.commands
             client.MessageReceived += HandleCommandAsync;
         }
 
+        /// <summary>
+        /// Command observer. This checks every message and filters out irrelevant messages.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
         private async Task HandleCommandAsync(SocketMessage message)
         {
-            var msg = message as SocketUserMessage;
-            if (msg == null) return;    // Don't process system messages
+            SocketUserMessage msg = message as SocketUserMessage;
+            //if (msg == null) return;    // Don't process system messages
 
+            // Great filter below
             if (msg == null ||
-                !msg.HasStringPrefix(Nitori.config.prefix, ref argPosition) ||
-                msg.HasMentionPrefix(client.CurrentUser, ref argPosition) ||
-                msg.Author.IsBot) return;
+                !msg.HasStringPrefix(Nitori.config.prefix, ref argPosition) ||  // If the message doesn't contain the prefix
+                msg.Author.IsBot)                                               // or the author is a bot
+            {     
+                return;         // Reject the message
+            }
 
-            var context = new SocketCommandContext(client, msg);
+            SocketCommandContext context = new SocketCommandContext(client, msg);
 
-            var result = await commandService.ExecuteAsync(context, argPosition, serviceProvider);
+            IResult result = await commandService.ExecuteAsync(context, argPosition + 1, serviceProvider);  // Parses the command
+                                                                                                            // argPos + 1 so that the command and the prefix are separate
+            
+        }
+
+        private async Task CommandFailed()
+        {
+
         }
     }
 }

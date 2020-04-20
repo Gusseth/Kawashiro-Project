@@ -18,6 +18,7 @@ namespace Kawashiro_Project.util
 
         public static Task Log(string msg, LogSeverity logSeverity = LogSeverity.Info, string source = debugSource)
         {
+            if (msg == null) return Task.CompletedTask; // Do nothing if the message is null.    
             LogMessage logMessage = new LogMessage(logSeverity, source, msg);
             Console.WriteLine(logMessage.ToString());
             return Task.CompletedTask;
@@ -25,6 +26,7 @@ namespace Kawashiro_Project.util
 
         public static Task Log(object msg, LogSeverity logSeverity = LogSeverity.Info, string source = debugSource)
         {
+            if (msg == null) return Task.CompletedTask; // Do nothing if the message is null.  
             LogMessage logMessage = new LogMessage(logSeverity, source, msg.ToString());
             Console.WriteLine(logMessage.ToString());
             return Task.CompletedTask;

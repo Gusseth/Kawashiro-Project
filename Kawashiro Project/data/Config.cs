@@ -15,8 +15,10 @@ namespace Kawashiro_Project.data
         public const string CONFIG_PATH = "data\\config.json"; // Hardcoded config path.
         public const uint CURRENT_CONFIG_VERSION = 0;          // Used to determine if a config is outdated.
 
+        public ulong authorID { get; private set; } // Current token the bot uses.
         public string token { get; private set; }   // Current token the bot uses.
         public string prefix { get; private set; }  // Bot prefix
+
         private uint configVersion { get; set; }    // The version of the config to determine if a rewrite is necessary.
 
         private JObject config;                     // The entire config as a json object.
@@ -27,9 +29,8 @@ namespace Kawashiro_Project.data
         /// <param name="path">The path to the config.json file</param>
         public Config(string path)
         {
-            path = FindConfig(path); // path will always be path
+            path = RewriteConfig(path);
             ReadConfig(path);
-            LoadConfigVariables(path);
         }
 
         /// <summary>
@@ -39,15 +40,11 @@ namespace Kawashiro_Project.data
         public void ReadConfig(string path)
         {
             config = JObject.Parse(File.ReadAllTextAsync(path).Result);
-        }
 
-        /// <summary>
-        /// Loads all base variables in the config such as token, etc.
-        /// </summary>
-        public void LoadConfigVariables(string path)
-        {
             token = config.Value<string>("token");
             configVersion = config.Value<uint>("configVersion");
+            prefix = config.Value<string>("prefix");
+            authorID = config.Value<ulong>("authorID");
 
             if (configVersion != CURRENT_CONFIG_VERSION)
             {
@@ -80,28 +77,14 @@ namespace Kawashiro_Project.data
         }
 
         /// <summary>
-        /// Checks if data\config.json exists. Also makes the data directory if it doesn't already exists.
+        /// Rebuilds/Generates a config.json from Resources
         /// </summary>
-        /// <param name="path">The path to the config.json file</param>
+        /// <param name="path">Path to config.json</param>
         /// <returns>path</returns>
-        private string FindConfig(string path)
+        private string RewriteConfig(string path)
         {
-            if (!File.Exists(path))
-            {
-                Debug.Log("config.json is not found in the data folder! Building the config...", LogSeverity.Warning);
-                RewriteConfig(path);
-            }
+            KappaIO.EnsureFileExists(path, Resources.config, "config.json is not found in the data folder! Building the config...");
             return path;
-        }
-
-        /// <summary>
-        /// Overwrites/Creates a config based on the internal one found in Resources
-        /// </summary>
-        /// <param name="path"></param>
-        private void RewriteConfig(string path)
-        {
-            Directory.CreateDirectory(DataManager.PATH_TO_DATA_FOLDER);
-            File.WriteAllBytesAsync(path, Resources.config);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Kawashiro_Project.commands;
 using Kawashiro_Project.data;
 using Kawashiro_Project.exceptions;
 using Kawashiro_Project.util;
@@ -19,6 +20,7 @@ namespace Kawashiro_Project
         protected DiscordSocketClient client;       // Client that is used to connect to Discord
         protected CommandService commandService;    // Base for all commands
         protected IServiceProvider serviceProvider; // Message I/O service for the bot
+        protected CommandHandler commandHandler;    // CommandHandler singleton
 
         private string token { get; set; }      // Bot token as given from the Discord Developer site
 
@@ -44,6 +46,9 @@ namespace Kawashiro_Project
                 client = new DiscordSocketClient(config.GetDiscordSocketConfig());
                 commandService = new CommandService(config.GetCommandServiceConfig());
                 serviceProvider = new ServiceCollection().AddSingleton(client).AddSingleton(commandService).BuildServiceProvider();
+
+                commandHandler = new CommandHandler(commandService, client, serviceProvider);
+                await commandHandler.Initialize();
 
                 client.Log += Debug.Log;
                 return true;
