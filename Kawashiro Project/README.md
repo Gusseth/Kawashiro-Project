@@ -1,4 +1,4 @@
-﻿# The Kawashiro Project - A Multi-Purpose Discord Bot for /r/weather
+﻿# The Kawashiro Project - A Discord Bot for /r/weather
 
 ## An Overview
 
