@@ -1,4 +1,5 @@
 ﻿{
   "configVersion":  0,
-  "token": ""
+  "token": "",
+  "prefix":  "!n"
 }

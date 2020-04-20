@@ -63,6 +63,9 @@ namespace Kawashiro_Project
             return false;
         }
 
+        /// <summary>
+        /// Logs the bot in to the given bot token.
+        /// </summary>
         private async void LogIn()
         {
             try {             

@@ -16,7 +16,7 @@ namespace Kawashiro_Project.data
         public const uint CURRENT_CONFIG_VERSION = 0;          // Used to determine if a config is outdated.
 
         public string token { get; private set; }   // Current token the bot uses.
-        public CommandServiceConfig test;
+        public string prefix { get; private set; }  // Bot prefix
         private uint configVersion { get; set; }    // The version of the config to determine if a rewrite is necessary.
 
         private JObject config;                     // The entire config as a json object.
@@ -27,8 +27,9 @@ namespace Kawashiro_Project.data
         /// <param name="path">The path to the config.json file</param>
         public Config(string path)
         {
-            ReadConfig(FindConfig(path));
-            LoadConfigVariables();
+            path = FindConfig(path); // path will always be path
+            ReadConfig(path);
+            LoadConfigVariables(path);
         }
 
         /// <summary>
@@ -38,7 +39,16 @@ namespace Kawashiro_Project.data
         public void ReadConfig(string path)
         {
             config = JObject.Parse(File.ReadAllTextAsync(path).Result);
-            
+        }
+
+        /// <summary>
+        /// Loads all base variables in the config such as token, etc.
+        /// </summary>
+        public void LoadConfigVariables(string path)
+        {
+            token = config.Value<string>("token");
+            configVersion = config.Value<uint>("configVersion");
+
             if (configVersion != CURRENT_CONFIG_VERSION)
             {
                 Debug.Log("The current config is outdated. Rebuilding config...");
@@ -49,15 +59,6 @@ namespace Kawashiro_Project.data
             {
                 throw new MissingTokenException();
             }
-        }
-
-        /// <summary>
-        /// Loads all base variables in the config such as token, etc.
-        /// </summary>
-        public void LoadConfigVariables()
-        {
-            token = config.Value<string>("token");
-            configVersion = config.Value<uint>("configVersion");
         }
 
         /// <summary>
@@ -82,20 +83,21 @@ namespace Kawashiro_Project.data
         /// Checks if data\config.json exists. Also makes the data directory if it doesn't already exists.
         /// </summary>
         /// <param name="path">The path to the config.json file</param>
-        /// <returns></returns>
+        /// <returns>path</returns>
         private string FindConfig(string path)
         {
-            if (File.Exists(path))
+            if (!File.Exists(path))
             {
-                return path;
-            } else
-            {
-                Debug.Log("config.json is not found in the data folder! Building the config...", LogSeverity.Warning, this.ToString());
+                Debug.Log("config.json is not found in the data folder! Building the config...", LogSeverity.Warning);
                 RewriteConfig(path);
-                return path;
             }
+            return path;
         }
 
+        /// <summary>
+        /// Overwrites/Creates a config based on the internal one found in Resources
+        /// </summary>
+        /// <param name="path"></param>
         private void RewriteConfig(string path)
         {
             Directory.CreateDirectory(DataManager.PATH_TO_DATA_FOLDER);
