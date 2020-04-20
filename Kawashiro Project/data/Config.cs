@@ -4,6 +4,9 @@ using Kawashiro_Project.Properties;
 using System.IO;
 using Newtonsoft.Json.Linq;
 using Kawashiro_Project.exceptions;
+using Discord.Commands;
+using Discord.WebSocket;
+using System;
 
 namespace Kawashiro_Project.data
 {
@@ -13,6 +16,7 @@ namespace Kawashiro_Project.data
         public const uint CURRENT_CONFIG_VERSION = 0;          // Used to determine if a config is outdated.
 
         public string token { get; private set; }   // Current token the bot uses.
+        public CommandServiceConfig test;
         private uint configVersion { get; set; }    // The version of the config to determine if a rewrite is necessary.
 
         private JObject config;                     // The entire config as a json object.
@@ -23,19 +27,17 @@ namespace Kawashiro_Project.data
         /// <param name="path">The path to the config.json file</param>
         public Config(string path)
         {
-            LoadConfig(FindConfig(path));
+            ReadConfig(FindConfig(path));
+            LoadConfigVariables();
         }
 
         /// <summary>
         /// Loads or reloads the config.
         /// </summary>
         /// <param name="path">The path to the config.json file</param>
-        public void LoadConfig(string path)
+        public void ReadConfig(string path)
         {
             config = JObject.Parse(File.ReadAllTextAsync(path).Result);
-
-            token = (string)config.GetValue("token");
-            configVersion = uint.Parse((string)config.GetValue("configVersion"));
             
             if (configVersion != CURRENT_CONFIG_VERSION)
             {
@@ -47,6 +49,33 @@ namespace Kawashiro_Project.data
             {
                 throw new MissingTokenException();
             }
+        }
+
+        /// <summary>
+        /// Loads all base variables in the config such as token, etc.
+        /// </summary>
+        public void LoadConfigVariables()
+        {
+            token = config.Value<string>("token");
+            configVersion = config.Value<uint>("configVersion");
+        }
+
+        /// <summary>
+        /// Returns a CommandServiceConfig as specified in config.json or a dummy config if one doesn't exist
+        /// </summary>
+        /// <returns>CommandServiceConfig as specified in config.json or an empty config</returns>
+        public CommandServiceConfig GetCommandServiceConfig()
+        {
+            return config.Value<CommandServiceConfig>("CommandServiceConfig") ?? new CommandServiceConfig();
+        }
+
+        /// <summary>
+        /// Returns a DiscordSocketConfig as specified in config.json or a dummy config if one doesn't exist
+        /// </summary>
+        /// <returns>DiscordSocketConfig as specified in config.json or an empty config</returns>
+        public DiscordSocketConfig GetDiscordSocketConfig()
+        {
+            return config.Value<DiscordSocketConfig>("DiscordSocketConfig") ?? new DiscordSocketConfig();
         }
 
         /// <summary>

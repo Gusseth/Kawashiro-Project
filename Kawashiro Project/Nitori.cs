@@ -1,8 +1,10 @@
 ﻿using Discord;
+using Discord.Commands;
 using Discord.WebSocket;
 using Kawashiro_Project.data;
 using Kawashiro_Project.exceptions;
 using Kawashiro_Project.util;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 
@@ -12,9 +14,11 @@ namespace Kawashiro_Project
     {
         public const string version = "0.0.1a";
 
-        public static Config config;            // Singleton Config class
+        public static Config config;                // Singleton Config class
 
-        protected DiscordSocketClient client;   // Client that is used to connect to Discord
+        protected DiscordSocketClient client;       // Client that is used to connect to Discord
+        protected CommandService commandService;    // Base for all commands
+        protected IServiceProvider serviceProvider; // Message I/O service for the bot
 
         private string token { get; set; }      // Bot token as given from the Discord Developer site
 
@@ -34,11 +38,14 @@ namespace Kawashiro_Project
         {
             try
             {
-                client = new DiscordSocketClient();
-                client.Log += Debug.Log;
-
                 config = new Config(Config.CONFIG_PATH);
                 token = config.token;
+
+                client = new DiscordSocketClient(config.GetDiscordSocketConfig());
+                commandService = new CommandService(config.GetCommandServiceConfig());
+                serviceProvider = new ServiceCollection().AddSingleton(client).AddSingleton(commandService).BuildServiceProvider();
+
+                client.Log += Debug.Log;
                 return true;
             }
             catch (OutdatedConfigException)
