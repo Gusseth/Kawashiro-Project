@@ -43,8 +43,9 @@ namespace Kawashiro_Project.commands
             //if (msg == null) return;    // Don't process system messages
 
             // Great filter below
-            if (msg == null ||
+            if (msg == null ||                                                  // If the message is a system message
                 !msg.HasStringPrefix(Nitori.config.prefix, ref argPosition) ||  // If the message doesn't contain the prefix
+                msg.Content == Nitori.config.prefix ||                          // If the message itself is empty and only contains the prefix
                 msg.Author.IsBot)                                               // or the author is a bot
             {     
                 return;         // Reject the message
