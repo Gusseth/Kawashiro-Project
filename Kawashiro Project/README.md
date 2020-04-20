@@ -2,7 +2,7 @@
 
 ## An Overview
 
-After surviving the meme hell that is CPSC 121 and 210, I am returning to C# to make a bot for the server.
+After surviving the meme hell that is CPSC 121 and 210, I am returning to C# to make a bot for the server.\
 *Nitori* - The bot agent, will be filling in the gap brought on by MEE6. 
 
 ## Goals
