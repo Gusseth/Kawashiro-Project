@@ -12,3 +12,4 @@ The following list will be the main scope for Nitori:
 - Be able to delete any messages between a given message ID so deletes are more precise
 - A mutiple choice poll system where you can vote by emoting to the message
 - Post some dank memes as the successor to *Anarkali* like !flexmoney
+- Limited local file transfer to server???
