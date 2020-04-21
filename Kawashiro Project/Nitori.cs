@@ -109,7 +109,7 @@ namespace Kawashiro_Project
         /// <param name="msg">The messsage content</param>
         /// <param name="args">Compounded string arguments</param>
         /// <returns></returns>
-        public static async Task Say(IMessageChannel channel, string msg, params object?[] args)
+        public static async Task Say(IMessageChannel channel, string msg, params object[] args)
         {
             await channel.SendMessageAsync(string.Format(msg, args));
         }

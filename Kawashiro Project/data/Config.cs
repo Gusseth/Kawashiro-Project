@@ -10,14 +10,17 @@ using System;
 
 namespace Kawashiro_Project.data
 {
-    class Config
+    public class Config
     {
         public const string CONFIG_PATH = "data\\config.json"; // Hardcoded config path.
         public const uint CURRENT_CONFIG_VERSION = 0;          // Used to determine if a config is outdated.
 
-        public ulong authorID { get; private set; } // Current token the bot uses.
-        public string token { get; private set; }   // Current token the bot uses.
-        public string prefix { get; private set; }  // Bot prefix
+        public ulong authorID { get; private set; }         // Current token the bot uses.
+        public string token { get; private set; }           // Current token the bot uses.
+        public string prefix { get; private set; }          // Bot prefix
+        public bool separatePrefix { get; private set; }    // Should bot prefix be separate
+        public int deleteMessageInMs { get; private set; }  // Deletes temporary messages in x milliseconds
+        public int rateDelayInMs { get; private set; }      // Delay to avoid rate limit
 
         private uint configVersion { get; set; }    // The version of the config to determine if a rewrite is necessary.
 
@@ -44,7 +47,10 @@ namespace Kawashiro_Project.data
             token = config.Value<string>("token");
             configVersion = config.Value<uint>("configVersion");
             prefix = config.Value<string>("prefix");
+            separatePrefix = config.Value<bool>("separatePrefix");
             authorID = config.Value<ulong>("authorID");
+            deleteMessageInMs = config.Value<int>("deleteMessageInMs");
+            rateDelayInMs = config.Value<int>("rateDelayInMs");
 
             if (configVersion != CURRENT_CONFIG_VERSION)
             {

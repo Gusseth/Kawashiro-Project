@@ -13,11 +13,13 @@ namespace Kawashiro_Project.commands
 {
     public class CommandHandler
     {
-        protected int argPosition;                  // 
+        protected int argPosition;   // Which 'word' is the start of the command
 
         protected readonly CommandService commandService;       // CommandService singleton
         protected readonly DiscordSocketClient client;          // Client singleton
         protected readonly IServiceProvider serviceProvider;    // IServiceProvider singleton
+        protected int prefixLength;                             // Length of the prefix in the command
+        private bool separatePrefix;                            // Should the prefix be separate from the command
 
         public CommandHandler(CommandService commandService, DiscordSocketClient client, IServiceProvider serviceProvider, int argPosition = 0)
         {
@@ -25,6 +27,8 @@ namespace Kawashiro_Project.commands
             this.client = client;
             this.serviceProvider = serviceProvider;
             this.argPosition = argPosition;
+            separatePrefix = Nitori.config.separatePrefix;
+            prefixLength = separatePrefix ? Nitori.config.prefix.Length + 1 : Nitori.config.prefix.Length;  // Adjust for the additional whitespace
         }
 
         public async Task Initialize()
@@ -54,8 +58,10 @@ namespace Kawashiro_Project.commands
 
             SocketCommandContext context = new SocketCommandContext(client, msg);
 
-            IResult result = await commandService.ExecuteAsync(context, argPosition + 1, serviceProvider);  // Parses the command
-                                                                                                            // argPos + 1 so that the command and the prefix are separate
+            int commandStart = separatePrefix ? argPosition + 1 : argPosition;  // argPos + 1 so that the command and the prefix 
+                                                                                // are separate if separartePrefix is true
+            IResult result = await commandService.ExecuteAsync(context, commandStart, serviceProvider);  // Parses the command
+                                                                                                            
             //await PostCommandExecution(result, context);
         }
 
@@ -78,7 +84,7 @@ namespace Kawashiro_Project.commands
                 string commandName = command.IsSpecified ? // Checks if the command that errored out is a valid command
                     command.Value.Name :                   // If it is a valid command, use the name of said command
                     context.Message.Content.Substring      // If not, then use the "command" that was attempted as the name
-                    (Nitori.config.prefix.Length + 1);
+                    (prefixLength);
                 await ParseCommandErrors(context, commandName, result.Error, result.ErrorReason);
             }
         }

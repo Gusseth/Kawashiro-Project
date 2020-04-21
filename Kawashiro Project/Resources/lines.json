@@ -1,14 +1,31 @@
 ﻿{
-  "UnknownCommandError": "I don't know what '{0}' is.",
-  "CommandPermissionsError": "Sorry, but you are not a true administrator to use '{0}'.",
-  "CommandExecutionError": {
-    "0": "The command {0}failed to execute.\n",
-    "1": "The command {0}failed to execute... 糞\n"
-  }
+  "About": [
 
-    "NoReasonGiven": "No reason given.",
-    "ReasonGiven": "Reason: {1}",
+  ],
 
-    "DeleteMessageNumeric": "I've deleted {0} messages."
+  "MediaFolderEmpty": "The media folder is empty.",
+  "MediaFolderDisplay": "Here are the {1} files inside the media folder:\n",
+  "MediaFolderCodeblock": "```\n{0}```",
 
-  }
+  "FileNotFound": "The file '{0}' does not exist.",
+
+  "UnknownCommandError": [
+    "I don't know what '{0}' is.",
+    "What's a '{0}'?",
+    "Unknown command. Try '!n help' for a list of commands."
+  ],
+  "CommandPermissionsError": [
+    "Sorry, but you are not a true administrator to use '{0}'.",
+    "Not so fast, {2}."
+  ],
+  "CommandExecutionError": [
+    "The command {0}failed to execute.\n",
+    "Huh? {0}failed to execute...\n"
+  ],
+
+  "NoReasonGiven": "No reason given.",
+  "ReasonGiven": "Reason: {1}",
+
+  "DeleteMessageNumeric": "I've deleted {0} messages."
+
+}
