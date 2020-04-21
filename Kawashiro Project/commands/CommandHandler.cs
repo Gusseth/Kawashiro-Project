@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Kawashiro_Project.data;
 using Kawashiro_Project.util;
 using System;
 using System.Collections.Generic;
@@ -74,7 +75,10 @@ namespace Kawashiro_Project.commands
         {
             if (!string.IsNullOrEmpty(result?.ErrorReason))
             {
-                string commandName = command.IsSpecified ? command.Value.Name : context.Message.Content.Substring(Nitori.config.prefix.Length + 1);
+                string commandName = command.IsSpecified ? // Checks if the command that errored out is a valid command
+                    command.Value.Name :                   // If it is a valid command, use the name of said command
+                    context.Message.Content.Substring      // If not, then use the "command" that was attempted as the name
+                    (Nitori.config.prefix.Length + 1);
                 await ParseCommandErrors(context, commandName, result.Error, result.ErrorReason);
             }
         }
@@ -85,41 +89,43 @@ namespace Kawashiro_Project.commands
         /// </summary>
         /// <param name="context">The message behind the command</param>
         /// <param name="error">The type of error</param>
-        /// <param name="reason">The message if</param>
+        /// <param name="reason">The message if and error arises</param>
         /// <returns></returns>
         private async Task ParseCommandErrors(ICommandContext context, string command, CommandError? error, string reason)
         {
+            string author = context.Message.Author.Username;
             switch (error)
             {
                 case (CommandError.Exception | CommandError.Unsuccessful):
-                    await CommandFailed(context.Channel, reason);
+                    await CommandFailed(context, command, reason);
                     break;
                 case (CommandError.UnknownCommand):
-                    await Nitori.Say(context.Channel, $"I don't know what '{command}' is.");
+                    await Nitori.Say(context.Channel,LineManager.GetLine("UnknownCommandError"), command, reason, author);
                     break;
                 case (CommandError.UnmetPrecondition):
-                    if (reason == "") await Nitori.Say(context.Channel, $"Sorry, but you are not a true administrator to use '{command}'.");
+                    if (reason == "") await Nitori.Say(context.Channel, LineManager.GetLine("CommandPermissionsError"), command, reason, author);
                     break;
                 default:
-                    await CommandFailed(context.Channel, reason);
+                    await CommandFailed(context, command, reason);
                     break;
             }
         }
 
         /// <summary>
-        /// Fires when a command fails to execute due to an exception
+        /// Fire when a command fails to execute due to an exception
         /// </summary>
-        /// <param name="context"></param>
+        /// <param name="channel"></param>
+        /// <param name="command"></param>
         /// <param name="reason"></param>
         /// <returns></returns>
-        private async Task CommandFailed(IMessageChannel channel, string reason = "")
+        private async Task CommandFailed(ICommandContext context, string command = "", string reason = "")
         {
-            string reasonSentence = "No reason given.";
-            if (reason != "")
-            {
-                reasonSentence = $"Reason: {reason}";
-            }
-            await Nitori.Say(channel, "The command failed to execute.\n" + reasonSentence);
+            IMessageChannel channel = context.Channel;
+            string author = context.Message.Author.Username;
+            if (!string.IsNullOrEmpty(command)) command = "'" + command + "' ";
+            string reasonSentence = LineManager.GetLine("NoReasonGiven");
+            if (!string.IsNullOrEmpty(reason)) reasonSentence = LineManager.GetLine("ReasonGiven");
+            await Nitori.Say(channel, LineManager.GetLine("CommandExecutionError") + reasonSentence, command, reason, author);
         }
     }
 }

@@ -12,7 +12,15 @@ namespace Kawashiro_Project.commands.modules
 {
     public class DeleteCommand : ModuleBase<SocketCommandContext>
     {
+        // TODO: Add functionality that bypasses the 2-week limit of the API
+        
+        /// <summary>
+        /// Enumerated Message deletion. Deletes amount number of messages.
+        /// </summary>
+        /// <param name="amount">n posts above the command call</param>
+        /// <returns></returns>
         [Command("Delete")]
+        [Summary("Enumerated Message deletion. Deletes amount number of messages.")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task Delete(int amount)
         {
@@ -27,7 +35,15 @@ namespace Kawashiro_Project.commands.modules
             await delMessage.DeleteAsync();
         }
 
+        /// <summary>
+        /// Message deletion via messageID. Deletes all the messages below the given ID. 
+        /// Exclusive, meaning the given message ID's message won't be deleted.
+        /// </summary>
+        /// <param name="destinationID">Upper bound of the deletion</param>
+        /// <param name="startID">Lower bound of the deletion</param>
+        /// <returns></returns>
         [Command("Delete")]
+        [Summary("Message deletion via messageID. Deletes all the messages below the given ID. Exclusive, meaning the destinationID message won't be deleted.")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task Delete(ulong destinationID, ulong startID = 0)
         {

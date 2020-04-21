@@ -1,4 +1,14 @@
 ﻿{
-  "CommandFailed": "I don't know that command.",
-  "DeleteMessageNumeric": "I've deleted {0} messages."
-}
+  "UnknownCommandError": "I don't know what '{0}' is.",
+  "CommandPermissionsError": "Sorry, but you are not a true administrator to use '{0}'.",
+  "CommandExecutionError": {
+    "0": "The command {0}failed to execute.\n",
+    "1": "The command {0}failed to execute... 糞\n"
+  }
+
+    "NoReasonGiven": "No reason given.",
+    "ReasonGiven": "Reason: {1}",
+
+    "DeleteMessageNumeric": "I've deleted {0} messages."
+
+  }

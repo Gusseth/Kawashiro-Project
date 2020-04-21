@@ -16,6 +16,8 @@ namespace Kawashiro_Project
         public const string version = "0.0.1a";
 
         public static Config config;                // Singleton Config class
+        public static LineManager lineManager;      // Singleton LineManager class
+        public static Random random;                // Singleton Random class
 
         protected DiscordSocketClient client;       // Client that is used to connect to Discord
         protected CommandService commandService;    // Base for all commands
@@ -40,7 +42,9 @@ namespace Kawashiro_Project
         {
             try
             {
+                random = new Random(420696969);
                 config = new Config(Config.CONFIG_PATH);
+                lineManager = new LineManager(LineManager.LINES_PATH);
                 token = config.token;
 
                 client = new DiscordSocketClient(config.GetDiscordSocketConfig());
@@ -87,9 +91,27 @@ namespace Kawashiro_Project
             }
         }
 
+        /// <summary>
+        /// Says something in the given text channel
+        /// </summary>
+        /// <param name="channel"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
         public static async Task Say(IMessageChannel channel, string msg)
         {
             await channel.SendMessageAsync(msg);
+        }
+
+        /// <summary>
+        /// Generic-fied version of the Say function for compounded strings.
+        /// </summary>
+        /// <param name="channel">The channel this message is posted</param>
+        /// <param name="msg">The messsage content</param>
+        /// <param name="args">Compounded string arguments</param>
+        /// <returns></returns>
+        public static async Task Say(IMessageChannel channel, string msg, params object?[] args)
+        {
+            await channel.SendMessageAsync(string.Format(msg, args));
         }
     }
 }
