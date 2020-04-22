@@ -5,7 +5,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Kawashiro_Project</RootNamespace>
     <Version>0.0.1</Version>
-    <StartupObject></StartupObject>
+    <StartupObject>Kawashiro_Project.Nitori</StartupObject>
+    <ApplicationIcon>Resources\icon512.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
