@@ -15,7 +15,7 @@ namespace Kawashiro_Project
 {
     class Nitori
     {
-        public const string version = "0.0.1a";
+        public const string version = "0.1a";
 
         public static Config config;                // Singleton Config class
         public static LineManager lineManager;      // Singleton LineManager class
@@ -142,6 +142,7 @@ namespace Kawashiro_Project
             string oldToken = config.token;
             config = new Config(Config.CONFIG_PATH);
             lineManager = new LineManager(LineManager.LINES_PATH);
+            guildManager = new GuildManager(GuildManager.GUILDS_PATH);
         }
 
         /// <summary>
