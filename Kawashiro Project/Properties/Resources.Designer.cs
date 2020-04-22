@@ -73,9 +73,39 @@ namespace Kawashiro_Project.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] icon512 {
+            get {
+                object obj = ResourceManager.GetObject("icon512", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] icon5121 {
+            get {
+                object obj = ResourceManager.GetObject("icon5121", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] lines {
             get {
                 object obj = ResourceManager.GetObject("lines", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] logo {
+            get {
+                object obj = ResourceManager.GetObject("logo", resourceCulture);
                 return ((byte[])(obj));
             }
         }
