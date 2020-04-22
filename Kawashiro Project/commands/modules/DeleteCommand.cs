@@ -20,6 +20,7 @@ namespace Kawashiro_Project.commands.modules
         /// <param name="amount">n posts above the command call</param>
         /// <returns></returns>
         [Command("Delete")]
+        [Alias("Del")]
         [Summary("Enumerated Message deletion. Deletes amount number of messages.")]
         [RequireUserPermission(ChannelPermission.ManageMessages)]
         public async Task Delete(int amount)
@@ -37,6 +38,7 @@ namespace Kawashiro_Project.commands.modules
         /// <param name="startID">Lower bound of the deletion</param>
         /// <returns></returns>
         [Command("Delete")]
+        [Alias("Del")]
         [Summary("Message deletion via messageID. Deletes all the messages below the given ID. Exclusive, meaning the destinationID message won't be deleted.")]
         [RequireUserPermission(ChannelPermission.ManageMessages)]
         public async Task Delete(ulong destinationID, ulong startID = 0)
@@ -79,6 +81,7 @@ namespace Kawashiro_Project.commands.modules
         /// <param name="ids">Message IDs to delete</param>
         /// <returns></returns>
         [Command("PDelete")]
+        [Alias("pd")]
         [Summary("Precision delete, put in a bunch of message IDs to delete.")]
         [RequireUserPermission(ChannelPermission.ManageMessages)]
         public async Task PreciseDelete(params ulong?[] ids)
