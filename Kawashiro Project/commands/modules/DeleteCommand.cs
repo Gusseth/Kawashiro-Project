@@ -79,7 +79,7 @@ namespace Kawashiro_Project.commands.modules
         /// <param name="ids">Message IDs to delete</param>
         /// <returns></returns>
         [Command("PDelete")]
-        [Summary("Precision delete, a bunch of message IDs to delete.")]
+        [Summary("Precision delete, put in a bunch of message IDs to delete.")]
         [RequireUserPermission(ChannelPermission.ManageMessages)]
         public async Task PreciseDelete(params ulong?[] ids)
         {

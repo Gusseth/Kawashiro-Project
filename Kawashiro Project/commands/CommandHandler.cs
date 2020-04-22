@@ -30,6 +30,10 @@ namespace Kawashiro_Project.commands
                 Nitori.config.prefix.Length + 1 : Nitori.config.prefix.Length;  // Adjust for the additional whitespace
         }
 
+        /// <summary>
+        /// Initializes this class.
+        /// </summary>
+        /// <returns></returns>
         public async Task Initialize()
         {
             await commandService.AddModulesAsync(Assembly.GetEntryAssembly(), serviceProvider);
@@ -60,6 +64,7 @@ namespace Kawashiro_Project.commands
             int commandStart = Nitori.config.separatePrefix ? 
                 argPosition + 1 : argPosition;                                  // argPos + 1 so that the command and the prefix 
                                                                                 // are separate if separartePrefix is true
+            
             IResult result = await commandService.ExecuteAsync(context, commandStart, serviceProvider);  // Parses the command
                                                                                                             
             //await PostCommandExecution(result, context);

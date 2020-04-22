@@ -24,13 +24,17 @@ namespace Kawashiro_Project
 
         protected DiscordSocketClient client;       // Client that is used to connect to Discord
         protected CommandService commandService;    // Base for all commands
-        protected IServiceProvider serviceProvider; // Message I/O service for the bot
+        protected IServiceProvider serviceProvider; // Used for dependency injection. Future feature?
         protected CommandHandler commandHandler;    // CommandHandler singleton
 
         private string token { get; set; }      // Bot token as given from the Discord Developer site
 
         public static void Main(string[] args) => new Nitori().MainAsync().GetAwaiter().GetResult();
 
+        /// <summary>
+        /// The main async method of the bot. The console.
+        /// </summary>
+        /// <returns></returns>
         public async Task MainAsync()
         {
             if (Initialize().Result)
@@ -41,6 +45,10 @@ namespace Kawashiro_Project
             await Task.Delay(-1);
         }
 
+        /// <summary>
+        /// Initializes the bot.
+        /// </summary>
+        /// <returns></returns>
         private async Task<bool> Initialize()
         {
             try
@@ -96,6 +104,9 @@ namespace Kawashiro_Project
             }
         }
 
+        /// <summary>
+        /// Logs the bot out.
+        /// </summary>
         private async void LogOut()
         {
             await client.LogoutAsync();

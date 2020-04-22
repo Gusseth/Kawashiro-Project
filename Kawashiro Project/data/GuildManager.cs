@@ -12,7 +12,7 @@ namespace Kawashiro_Project.data
     {
         public const string GUILDS_PATH = "data\\guilds.json"; // Hardcoded guilds.json path.
 
-        public Dictionary<ulong, KappaGuild> guilds;
+        public Dictionary<ulong, KappaGuild> guilds;    // Guild dictionary, <guild id, guild persistency data>
 
         /// <summary>
         /// Creates an object based off of data from the guilds.json.
