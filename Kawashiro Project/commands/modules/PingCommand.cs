@@ -1,4 +1,5 @@
 ﻿using Discord.Commands;
+using Kawashiro_Project.data;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,7 +12,7 @@ namespace Kawashiro_Project.commands.modules
         [Command("Ping")]
         public async Task Ping()
         {
-            await ReplyAsync("Pong!");
+            await ReplyAsync(LineManager.GetLine("PingResponse"));
         }
     }
 }

@@ -19,7 +19,6 @@ namespace Kawashiro_Project.commands
         protected readonly DiscordSocketClient client;          // Client singleton
         protected readonly IServiceProvider serviceProvider;    // IServiceProvider singleton
         protected int prefixLength;                             // Length of the prefix in the command
-        private bool separatePrefix;                            // Should the prefix be separate from the command
 
         public CommandHandler(CommandService commandService, DiscordSocketClient client, IServiceProvider serviceProvider, int argPosition = 0)
         {
@@ -27,8 +26,8 @@ namespace Kawashiro_Project.commands
             this.client = client;
             this.serviceProvider = serviceProvider;
             this.argPosition = argPosition;
-            separatePrefix = Nitori.config.separatePrefix;
-            prefixLength = separatePrefix ? Nitori.config.prefix.Length + 1 : Nitori.config.prefix.Length;  // Adjust for the additional whitespace
+            prefixLength = Nitori.config.separatePrefix ? 
+                Nitori.config.prefix.Length + 1 : Nitori.config.prefix.Length;  // Adjust for the additional whitespace
         }
 
         public async Task Initialize()
@@ -58,7 +57,8 @@ namespace Kawashiro_Project.commands
 
             SocketCommandContext context = new SocketCommandContext(client, msg);
 
-            int commandStart = separatePrefix ? argPosition + 1 : argPosition;  // argPos + 1 so that the command and the prefix 
+            int commandStart = Nitori.config.separatePrefix ? 
+                argPosition + 1 : argPosition;                                  // argPos + 1 so that the command and the prefix 
                                                                                 // are separate if separartePrefix is true
             IResult result = await commandService.ExecuteAsync(context, commandStart, serviceProvider);  // Parses the command
                                                                                                             
