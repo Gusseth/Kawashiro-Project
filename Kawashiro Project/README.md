@@ -1,4 +1,5 @@
-﻿# The Kawashiro Project - A Discord Bot for /r/weather
+﻿
+# The Kawashiro Project - A Discord Bot for /r/weather
 
 ## An Overview
 *Nitori* - The default namesake of the bot agent, will be filling in the gap brought on by MEE6.\
