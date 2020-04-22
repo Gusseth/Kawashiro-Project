@@ -3,10 +3,12 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Kawashiro_Project.commands;
 using Kawashiro_Project.data;
+using Kawashiro_Project.data.entities;
 using Kawashiro_Project.exceptions;
 using Kawashiro_Project.util;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Kawashiro_Project
@@ -17,6 +19,7 @@ namespace Kawashiro_Project
 
         public static Config config;                // Singleton Config class
         public static LineManager lineManager;      // Singleton LineManager class
+        public static GuildManager guildManager;    // Singleton GuildManager class
         public static Random random;                // Singleton Random class
 
         protected DiscordSocketClient client;       // Client that is used to connect to Discord
@@ -42,8 +45,9 @@ namespace Kawashiro_Project
         {
             try
             {
-                random = new Random(420696969);
+                random = new Random();
                 config = new Config(Config.CONFIG_PATH);
+                guildManager = new GuildManager(GuildManager.GUILDS_PATH);
                 lineManager = new LineManager(LineManager.LINES_PATH);
                 token = config.token;
 
@@ -141,12 +145,20 @@ namespace Kawashiro_Project
             if (after.VoiceChannel != null) return; // Do nothing if no one left
 
             SocketGuild guild = before.VoiceChannel.Guild;
+
+            KappaGuild kGuild;
+            guildManager.guilds.TryGetValue(guild.Id, out kGuild);  // Gets the guild persistent data
+
             foreach (SocketVoiceChannel voiceChannel in guild.VoiceChannels)
             {
                 if (voiceChannel.Users.Count > 0) return;  // Do nothing if there is a channel with people connected
             }
-            SocketTextChannel channel = guild.GetTextChannel(702275007400902817);
-            await channel.DeleteMessagesAsync(await channel.GetMessagesAsync(int.MaxValue).FlattenAsync());
+
+            foreach (ulong channelID in kGuild.clearedChannels)
+            {
+                SocketTextChannel channel = guild.GetTextChannel(channelID);
+                await channel.DeleteMessagesAsync(await channel.GetMessagesAsync(int.MaxValue).FlattenAsync());
+            }
         }
     }
 }

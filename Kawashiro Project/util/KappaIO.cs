@@ -26,5 +26,22 @@ namespace Kawashiro_Project.util
             }
             return path;
         }
+
+        /// <summary>
+        /// Makes sure that the file exists in the given path. If not, then generate an empty file.
+        /// </summary>
+        /// <param name="path">Path to desired file.</param>
+        /// <param name="msg">Message to log when the file is not found.</param>
+        /// <returns></returns>
+        public static string EnsureFileExists(string path, string msg = null)
+        {
+            if (!File.Exists(path))
+            {
+                Debug.Log(msg, LogSeverity.Warning);
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+                File.Create(path);
+            }
+            return path;
+        }
     }
 }

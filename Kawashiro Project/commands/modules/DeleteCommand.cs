@@ -13,9 +13,7 @@ using System.Threading.Tasks;
 namespace Kawashiro_Project.commands.modules
 {
     public class DeleteCommand : ModuleBase<SocketCommandContext>
-    {
-        // TODO: Add functionality that bypasses the 2-week limit of the API
-        
+    {        
         /// <summary>
         /// Enumerated Message deletion. Deletes amount number of messages.
         /// </summary>
@@ -75,17 +73,13 @@ namespace Kawashiro_Project.commands.modules
             await DeleteSuccess(accept.Count());
         }
 
-        [Command("Delete")]
-        [Summary("Message deletion via a link to a message. Deletes all the messages below the given message. Exclusive, meaning the destinationID message won't be deleted.")]
-        [RequireUserPermission(ChannelPermission.ManageMessages)]
-        public async Task Delete(string destinationURL, string startURL = "")
-        {
-            ulong startID;
-            if (string.IsNullOrEmpty(startURL)) startID = 0;
-            //await Delete(Context.Channel.GetMessageAsync(MessageExtensions.)
-        }
-
+        /// <summary>
+        /// Precision delete, give an array of message IDs to delete.
+        /// </summary>
+        /// <param name="ids">Message IDs to delete</param>
+        /// <returns></returns>
         [Command("PDelete")]
+        [Summary("Precision delete, a bunch of message IDs to delete.")]
         [RequireUserPermission(ChannelPermission.ManageMessages)]
         public async Task PreciseDelete(params ulong?[] ids)
         {
@@ -102,6 +96,11 @@ namespace Kawashiro_Project.commands.modules
 
         }
 
+        /// <summary>
+        /// Deletes the given messages no matter what
+        /// </summary>
+        /// <param name="messages">Messages to delete</param>
+        /// <returns></returns>
         private async Task DeleteMessages(IEnumerable<IMessage> messages)
         {
             try
@@ -120,6 +119,12 @@ namespace Kawashiro_Project.commands.modules
             }
         }
 
+        /// <summary>
+        /// Deletes the command, sends a message to the channel about the deletion, 
+        /// then deletes it in Nitori.config.deleteMessageInMs milliseconds
+        /// </summary>
+        /// <param name="args">Arguments for the compounded string</param>
+        /// <returns></returns>
         private async Task DeleteSuccess(params object[] args)
         {
             IUserMessage delMessage = await ReplyAsync(
