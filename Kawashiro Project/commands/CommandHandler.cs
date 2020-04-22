@@ -18,7 +18,6 @@ namespace Kawashiro_Project.commands
         protected readonly CommandService commandService;       // CommandService singleton
         protected readonly DiscordSocketClient client;          // Client singleton
         protected readonly IServiceProvider serviceProvider;    // IServiceProvider singleton
-        protected int prefixLength;                             // Length of the prefix in the command
 
         public CommandHandler(CommandService commandService, DiscordSocketClient client, IServiceProvider serviceProvider, int argPosition = 0)
         {
@@ -26,8 +25,6 @@ namespace Kawashiro_Project.commands
             this.client = client;
             this.serviceProvider = serviceProvider;
             this.argPosition = argPosition;
-            prefixLength = Nitori.config.separatePrefix ? 
-                Nitori.config.prefix.Length + 1 : Nitori.config.prefix.Length;  // Adjust for the additional whitespace
         }
 
         /// <summary>
@@ -86,6 +83,9 @@ namespace Kawashiro_Project.commands
         {
             if (!string.IsNullOrEmpty(result?.ErrorReason))
             {
+                int prefixLength = Nitori.config.separatePrefix ?
+                    Nitori.config.prefix.Length + 1 : Nitori.config.prefix.Length;  // Adjust for the additional whitespace
+
                 string commandName = command.IsSpecified ? // Checks if the command that errored out is a valid command
                     command.Value.Name :                   // If it is a valid command, use the name of said command
                     context.Message.Content.Substring      // If not, then use the "command" that was attempted as the name
@@ -105,13 +105,14 @@ namespace Kawashiro_Project.commands
         private async Task ParseCommandErrors(ICommandContext context, string command, CommandError? error, string reason)
         {
             string author = context.Message.Author.Username;
+            string prefix = Nitori.config.separatePrefix ? Nitori.config.prefix + " " : Nitori.config.prefix;  // {3} argument is prefix, compensate for having a spearated prefix
             switch (error)
             {
                 case (CommandError.Exception | CommandError.Unsuccessful):
                     await CommandFailed(context, command, reason);
                     break;
                 case (CommandError.UnknownCommand):
-                    await Nitori.Say(context.Channel,LineManager.GetLine("UnknownCommandError"), command, reason, author);
+                    await Nitori.Say(context.Channel, LineManager.GetLine("UnknownCommandError"), command, reason, author, prefix);
                     break;
                 case (CommandError.UnmetPrecondition):
                     if (reason == "") await Nitori.Say(context.Channel, LineManager.GetLine("CommandPermissionsError"), command, reason, author);
