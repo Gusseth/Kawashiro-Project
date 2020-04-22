@@ -1,9 +1,6 @@
 ﻿<h1 align="center">
     <img src="https://raw.githubusercontent.com/Gusseth/Kawashiro-Project/master/Kawashiro%20Project/Resources/logo.png" />
 </h1>
-<br />
-# The Kawashiro Project - A Discord Bot for /r/weather
-
 ## An Overview
 *Nitori* - The default namesake of the bot agent, will be filling in the gap brought on by MEE6.\
 After surviving the meme hell that is CPSC 121 and 210, I am returning to C# to make a bot for the server.
