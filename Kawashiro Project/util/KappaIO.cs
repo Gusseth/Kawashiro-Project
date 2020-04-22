@@ -39,7 +39,7 @@ namespace Kawashiro_Project.util
             {
                 Debug.Log(msg, LogSeverity.Warning);
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
-                File.Create(path);
+                File.Create(path).Close();
             }
             return path;
         }
