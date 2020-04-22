@@ -25,6 +25,11 @@ namespace Kawashiro_Project.commands.modules
         [RequireUserPermission(ChannelPermission.ManageMessages)]
         public async Task Delete(int amount)
         {
+            if (amount <= 0)
+            {
+                await ReplyAsync(string.Format(LineManager.GetLine("InvalidArgument"), amount, "greater than 0."));
+                return;
+            }
             IEnumerable<IMessage> messages = await Context.Channel.GetMessagesAsync(amount + 1).FlattenAsync();
             await DeleteMessages(messages);
             await DeleteSuccess(messages.Count());
