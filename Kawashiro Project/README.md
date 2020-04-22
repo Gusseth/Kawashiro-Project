@@ -1,6 +1,7 @@
 ﻿<h1 align="center">
     <img src="https://raw.githubusercontent.com/Gusseth/Kawashiro-Project/master/Kawashiro%20Project/Resources/logo.png" />
 </h1>
+\
 # The Kawashiro Project - A Discord Bot for /r/weather
 
 ## An Overview
