@@ -9,7 +9,7 @@ namespace Kawashiro_Project.commands.modules
 {
     public class PingCommand : ModuleBase<SocketCommandContext>
     {
-        [Command("Ping")]
+        [Command("Ping", true)]
         [Summary("Pong!")]
         public async Task Ping()
         {
