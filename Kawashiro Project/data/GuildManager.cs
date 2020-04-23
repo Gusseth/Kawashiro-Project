@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Kawashiro_Project.data
 {
@@ -12,7 +13,7 @@ namespace Kawashiro_Project.data
     {
         public const string GUILDS_PATH = "data\\guilds.json"; // Hardcoded guilds.json path.
 
-        public Dictionary<ulong, KappaGuild> guilds;    // Guild dictionary, <guild id, guild persistency data>
+        public Dictionary<ulong, KappaGuild> guilds;     // Guild dictionary, <guild id, guild persistency data>
 
         /// <summary>
         /// Creates an object based off of data from the guilds.json.
@@ -37,6 +38,14 @@ namespace Kawashiro_Project.data
                 KappaGuild guild = guildData.Value.ToObject<KappaGuild>();
                 guilds.Add(ulong.Parse(guildData.Name), guild);
             }
+        }
+
+        /// <summary>
+        /// Builds a new json format based on the current dictionary and replaces the old guilds.json
+        /// </summary>
+        public async Task ReplaceGuildsJson()
+        {
+            await File.WriteAllTextAsync(GUILDS_PATH, JObject.FromObject(guilds).ToString());
         }
     }
 }
