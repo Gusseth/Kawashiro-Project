@@ -17,9 +17,14 @@ namespace Kawashiro_Project.commands.modules
         private SocketGuild guild;
         private string guildName;
 
+        /// <summary>
+        /// Toggles the channel for auto-deletion when everyone disconnects from all calls. Uses mentions.
+        /// </summary>
+        /// <param name="channelName">String that complies with the mention notation for channels</param>
+        /// <returns></returns>
         [Command("ToggleCleared", true)]
         [Alias("TC")]
-        [Summary("")]
+        [Summary("Toggles the channel for auto-deletion when everyone disconnects from all calls. Uses mentions.")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task SetCleared(string channelName = "view")
         {
@@ -44,9 +49,14 @@ namespace Kawashiro_Project.commands.modules
             }
         }
 
+        /// <summary>
+        /// Toggles the channel for auto-deletion when everyone disconnects from all calls. Uses channel IDs.
+        /// </summary>
+        /// <param name="channelID">The ID of the channel</param>
+        /// <returns></returns>
         [Command("ToggleCleared", true)]
         [Alias("TC")]
-        [Summary("")]
+        [Summary("Toggles the channel for auto-deletion when everyone disconnects from all calls. Uses channel IDs.")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task SetCleared(ulong channelID)
         {
