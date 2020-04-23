@@ -17,7 +17,7 @@ namespace Kawashiro_Project.commands.modules
         /// <summary>
         /// Enumerated Message deletion. Deletes amount number of messages.
         /// </summary>
-        /// <param name="amount">n posts above the command call</param>
+        /// <param name="amount">n messages above the command call</param>
         /// <returns></returns>
         [Command("Delete")]
         [Alias("Del")]
@@ -32,7 +32,7 @@ namespace Kawashiro_Project.commands.modules
             }
             IEnumerable<IMessage> messages = await Context.Channel.GetMessagesAsync(amount + 1).FlattenAsync();
             await DeleteMessages(messages);
-            await DeleteSuccess(messages.Count());
+            _ = DeleteSuccess(messages.Count());
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Kawashiro_Project.commands.modules
             }
             */
             await DeleteMessages(accept);
-            await DeleteSuccess(accept.Count());
+            _ = DeleteSuccess(accept.Count());
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace Kawashiro_Project.commands.modules
                 await Task.Delay(Nitori.config.rateDelayInMs);
                 count++;
             }
-            await DeleteSuccess(count);
+            _ = DeleteSuccess(count);
 
         }
 
