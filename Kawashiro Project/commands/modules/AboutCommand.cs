@@ -36,11 +36,12 @@ namespace Kawashiro_Project.commands.modules
 					.WithIconUrl(avatarURL);
 			})
 			.AddField("The Commands", string.Format("The following commands are available as of **{0}**:", Context.User.Mention))
-			.AddField("🗑️delete/del", "<int> or <messageID>\n**Even older messages.**\n", true)
+			.AddField("🗑️delete/del", "<int> or <messageID>\n**Even older messages.**", true)
 			.AddField("📣echo", "<any length args>\nBot parrots what you say.", true)
+			.AddField("🎚️autoclear/ac", "<channel>\nMention a channel to toggle auto-clear.", true)
 			.AddField("🌿weed", "<filename> or dir\nUploads local files!", true)
 			.AddField("🏓ping", "No args.\nReturns a 'Pong!'", true)
-			.AddField("🤑flexmoney", "<natural num>\nFlex cash on the bot.", true);
+			.AddField("🤑flexmoney", "<natural>\nFlex cash on the bot.", true);
 			var embed = builder.Build();
 			await Context.Channel.SendMessageAsync(
 					null,
