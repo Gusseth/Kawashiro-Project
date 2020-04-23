@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+
 namespace Kawashiro_Project.commands.modules
 {
     public class AboutCommand : ModuleBase<SocketCommandContext>
@@ -34,7 +35,7 @@ namespace Kawashiro_Project.commands.modules
 					.WithUrl("https://github.com/Gusseth/Kawashiro-Project/tree/master/Kawashiro%20Project")
 					.WithIconUrl(avatarURL);
 			})
-			.AddField("The Commands", string.Format("The following commands are available as of **{0}**:", Nitori.version))
+			.AddField("The Commands", string.Format("The following commands are available as of **{0}**:", Context.User.Mention))
 			.AddField("🗑️delete/del", "<int> or <messageID>\n**Even older messages.**\n", true)
 			.AddField("📣echo", "<any length args>\nBot parrots what you say.", true)
 			.AddField("🌿weed", "<filename> or dir\nUploads local files!", true)
