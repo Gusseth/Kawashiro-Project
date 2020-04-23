@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Kawashiro_Project.commands.modules
 {
-    public class ToggleClearedCommand : ModuleBase<SocketCommandContext>
+    public class AutoClearCommand : ModuleBase<SocketCommandContext>
     {
         private readonly GuildManager guildManager = Nitori.guildManager;
         private SocketGuild guild;
@@ -22,11 +22,11 @@ namespace Kawashiro_Project.commands.modules
         /// </summary>
         /// <param name="channelName">String that complies with the mention notation for channels</param>
         /// <returns></returns>
-        [Command("ToggleCleared", true)]
-        [Alias("TC")]
+        [Command("AutoClear", true)]
+        [Alias("AC")]
         [Summary("Toggles the channel for auto-deletion when everyone disconnects from all calls. Uses mentions.")]
         [RequireUserPermission(GuildPermission.Administrator)]
-        public async Task SetCleared(string channelName = "view")
+        public async Task AutoClear(string channelName = "view")
         {
             guild = Context.Guild;
             guildName = guild.Name;
