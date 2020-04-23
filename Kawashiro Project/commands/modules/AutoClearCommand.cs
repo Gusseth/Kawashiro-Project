@@ -134,6 +134,7 @@ namespace Kawashiro_Project.commands.modules
                 // When the guild doesn't exist in guilds.json
                 kGuild = new KappaGuild(new ulong[] { channelID });
                 guildManager.guilds.Add(guild.Id, kGuild);
+                await ReplyAsync(string.Format(LineManager.GetLine("ClearedChannelsAdded"), guildName, channel.Mention));
             }
             await guildManager.ReplaceGuildsJson();
         }
