@@ -15,7 +15,7 @@ namespace Kawashiro_Project.commands.modules
         [Command("Weed")]
         [Summary("Uploads a file from the data\\media folder.")]
         [RequireUserPermission(ChannelPermission.AttachFiles)]
-        public async Task Weed([Remainder] string filename)
+        public async Task Weed([Remainder] string filename = "dir")
         {
             string path = Path.Combine("data\\media\\" + filename);
 
