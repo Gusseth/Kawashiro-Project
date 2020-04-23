@@ -13,7 +13,9 @@ using System.Threading.Tasks;
 namespace Kawashiro_Project.commands.modules
 {
     public class DeleteCommand : ModuleBase<SocketCommandContext>
-    {        
+    {
+        private const bool slowMode = false; // For debug purposes
+        
         /// <summary>
         /// Enumerated Message deletion. Deletes amount number of messages.
         /// </summary>
@@ -111,14 +113,25 @@ namespace Kawashiro_Project.commands.modules
         /// <returns></returns>
         private async Task DeleteMessages(IEnumerable<IMessage> messages)
         {
-            try
+            if (!slowMode)
             {
-                // Use official API for bulk deletion for newer messages
-                await (Context.Channel as SocketTextChannel).DeleteMessagesAsync(messages);
+                try
+                {
+                    // Use official API for bulk deletion for newer messages
+                    await (Context.Channel as SocketTextChannel).DeleteMessagesAsync(messages);
+                }
+                catch (ArgumentException)
+                {
+                    // We've reached messages that are older than 2 weeks
+                    foreach (IMessage msg in messages)
+                    {
+                        await Context.Channel.DeleteMessageAsync(msg.Id);
+                        await Task.Delay(Nitori.config.rateDelayInMs);
+                    }
+                }
             }
-            catch (ArgumentException)
+            else
             {
-                // We've reached messages that are older than 2 weeks
                 foreach (IMessage msg in messages)
                 {
                     await Context.Channel.DeleteMessageAsync(msg.Id);
