@@ -54,11 +54,11 @@ namespace Kawashiro_Project.commands.modules
         /// </summary>
         /// <param name="channelID">The ID of the channel</param>
         /// <returns></returns>
-        [Command("ToggleCleared", true)]
-        [Alias("TC")]
+        [Command("AutoClear", true)]
+        [Alias("AC")]
         [Summary("Toggles the channel for auto-deletion when everyone disconnects from all calls. Uses channel IDs.")]
         [RequireUserPermission(GuildPermission.Administrator)]
-        public async Task SetCleared(ulong channelID)
+        public async Task AutoClear(ulong channelID)
         {
             guild = Context.Guild;
             guildName = guild.Name;
