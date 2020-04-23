@@ -38,7 +38,8 @@ namespace Kawashiro_Project.commands.modules
 			.AddField("🗑️delete/del", "<int> or <messageID>\n**Even older messages.**\n", true)
 			.AddField("📣echo", "<any length args>\nBot parrots what you say.", true)
 			.AddField("🌿weed", "<filename> or dir\nUploads local files!", true)
-			.AddField("🏓ping", "No args.\nReturns a 'Pong!'", true);
+			.AddField("🏓ping", "No args.\nReturns a 'Pong!'", true)
+			.AddField("🤑flexmoney", "<natural num>\nFlex cash on the bot.", true);
 			var embed = builder.Build();
 			await Context.Channel.SendMessageAsync(
 					null,
