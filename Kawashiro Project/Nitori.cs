@@ -15,7 +15,7 @@ namespace Kawashiro_Project
 {
     class Nitori
     {
-        public const string version = "0.1a";
+        public const string version = "0.2a";
 
         public static Config config;                // Singleton Config class
         public static LineManager lineManager;      // Singleton LineManager class
