@@ -46,15 +46,19 @@ namespace Kawashiro_Project.commands
         private async Task HandleCommandAsync(SocketMessage message)
         {
             SocketUserMessage msg = message as SocketUserMessage;
-            //if (msg == null) return;    // Don't process system messages
+
+            bool prefixGuard = Nitori.config.separatePrefix ? 
+                (msg.HasStringPrefix(Nitori.config.prefix, ref argPosition)     // Confirms that the prefix is spearated as otherwise <prefix>ogpes is accepted.
+                    && (msg.Content.StartsWith(Nitori.config.prefix + " ")))    // i.e. prefix = !n and separate, !nhelp is accepted instead of !n help
+                : msg.HasStringPrefix(Nitori.config.prefix, ref argPosition);   // If the prefix is not separated, only check for the presence of the prefix
 
             // Great filter below
-            if (msg == null ||                                                  // If the message is a system message
-                !msg.HasStringPrefix(Nitori.config.prefix, ref argPosition) ||  // If the message doesn't contain the prefix
-                msg.Content == Nitori.config.prefix ||                          // If the message itself is empty and only contains the prefix
-                msg.Author.IsBot)                                               // or the author is a bot
+            if (msg == null ||                          // If the message is a system message
+                !prefixGuard ||                         // If the message doesn't pass the prefix check
+                msg.Content == Nitori.config.prefix ||  // If the message itself is empty and only contains the prefix
+                msg.Author.IsBot)                       // or the author is a bot
                 
-                return;                                                         // Reject the message
+                return;                                 // Reject the message
 
             SocketCommandContext context = new SocketCommandContext(client, msg);
 
