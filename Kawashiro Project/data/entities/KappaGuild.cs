@@ -6,10 +6,10 @@ namespace Kawashiro_Project.data.entities
 {
     public class KappaGuild
     {
-        public ulong[] clearedChannels; // The ID of the channels that are cleared once everyone disconnects from all voice channels
+        public List<ulong> clearedChannels; // The ID of the channels that are cleared once everyone disconnects from all voice channels
         public KappaGuild(ulong[] clearedChannels)
         {
-            this.clearedChannels = clearedChannels;
+            this.clearedChannels = new List<ulong>(clearedChannels);
         }
     }
 }
