@@ -35,7 +35,7 @@ namespace Kawashiro_Project.commands.modules
 					.WithUrl("https://github.com/Gusseth/Kawashiro-Project/tree/master/Kawashiro%20Project")
 					.WithIconUrl(avatarURL);
 			})
-			.AddField("The Commands", string.Format("The following commands are available as of **{0}**:", Context.User.Mention))
+			.AddField("The Commands", string.Format("The following commands are available as of **{0}**:", Nitori.version))
 			.AddField("🗑️delete/del", "<int> or <messageID>\n**Even older messages.**", true)
 			.AddField("📣echo", "<any length args>\nBot parrots what you say.", true)
 			.AddField("🎚️autoclear/ac", "<channel>\nMention a channel to toggle auto-clear.", true)
