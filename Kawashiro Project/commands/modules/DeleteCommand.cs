@@ -34,7 +34,7 @@ namespace Kawashiro_Project.commands.modules
             }
             IEnumerable<IMessage> messages = await Context.Channel.GetMessagesAsync(amount + 1).FlattenAsync();
             await DeleteMessages(messages);
-            _ = DeleteSuccess(messages.Count());
+            await DeleteSuccess(messages.Count());
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Kawashiro_Project.commands.modules
             }
             */
             await DeleteMessages(accept);
-            _ = DeleteSuccess(accept.Count());
+            await DeleteSuccess(accept.Count());
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace Kawashiro_Project.commands.modules
                 await Task.Delay(Nitori.config.rateDelayInMs);
                 count++;
             }
-            _ = DeleteSuccess(count);
+            await DeleteSuccess(count);
 
         }
 
