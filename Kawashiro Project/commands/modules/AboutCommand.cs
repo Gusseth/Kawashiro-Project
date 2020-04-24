@@ -11,6 +11,10 @@ namespace Kawashiro_Project.commands.modules
 {
     public class AboutCommand : ModuleBase<SocketCommandContext>
 	{
+		/// <summary>
+		/// Displays an embed that shows a description about the bot, the project, and a list of commands
+		/// </summary>
+		/// <returns></returns>
         [Command("About", true)]
 		[Alias("Help")]
         public async Task About()
@@ -19,9 +23,9 @@ namespace Kawashiro_Project.commands.modules
 
 			var builder = new EmbedBuilder()
 			.WithTitle("**The Kawashiro Project** - A Multipurpose Bot")
-			.WithDescription(string.Format(LineManager.GetLine("About"), "Nitori Kawashiro", Nitori.version))
+			.WithDescription(string.Format(ResponseManager.GetLine("About"), "Nitori Kawashiro", Nitori.version))
 			.WithUrl("https://github.com/Gusseth/Kawashiro-Project/tree/master/Kawashiro%20Project")
-			.WithColor(new Color(0x67BE67))
+			.WithColor(6798951)
 			.WithCurrentTimestamp()
 			.WithFooter(footer => {
 				footer

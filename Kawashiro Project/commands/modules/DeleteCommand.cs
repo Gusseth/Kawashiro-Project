@@ -29,7 +29,7 @@ namespace Kawashiro_Project.commands.modules
         {
             if (amount <= 0)
             {
-                await ReplyAsync(string.Format(LineManager.GetLine("InvalidArgument"), amount, "greater than 0"));
+                await ReplyAsync(string.Format(ResponseManager.GetLine("InvalidArgument"), amount, "greater than 0"));
                 return;
             }
             IEnumerable<IMessage> messages = await Context.Channel.GetMessagesAsync(amount + 1).FlattenAsync();
@@ -99,7 +99,7 @@ namespace Kawashiro_Project.commands.modules
                 IMessage msg = Context.Channel.GetMessageAsync(id).Result;
                 if (msg == null) continue;
                 await msg.DeleteAsync();
-                await Task.Delay(Nitori.config.rateDelayInMs);
+                await Task.Delay(Nitori.Config.rateDelayInMs);
                 count++;
             }
             await DeleteSuccess(count);
@@ -126,7 +126,7 @@ namespace Kawashiro_Project.commands.modules
                     foreach (IMessage msg in messages)
                     {
                         await Context.Channel.DeleteMessageAsync(msg.Id);
-                        await Task.Delay(Nitori.config.rateDelayInMs);
+                        await Task.Delay(Nitori.Config.rateDelayInMs);
                     }
                 }
             }
@@ -135,7 +135,7 @@ namespace Kawashiro_Project.commands.modules
                 foreach (IMessage msg in messages)
                 {
                     await Context.Channel.DeleteMessageAsync(msg.Id);
-                    await Task.Delay(Nitori.config.rateDelayInMs);
+                    await Task.Delay(Nitori.Config.rateDelayInMs);
                 }
             }
         }
@@ -149,8 +149,8 @@ namespace Kawashiro_Project.commands.modules
         private async Task DeleteSuccess(params object[] args)
         {
             IUserMessage delMessage = await ReplyAsync(
-                string.Format(LineManager.GetLine("DeleteMessageNumeric"), args));
-            await Task.Delay(Nitori.config.deleteMessageInMs);
+                string.Format(ResponseManager.GetLine("DeleteMessageNumeric"), args));
+            await Task.Delay(Nitori.Config.deleteMessageInMs);
             await delMessage.DeleteAsync();
         }
 

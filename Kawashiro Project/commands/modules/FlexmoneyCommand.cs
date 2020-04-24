@@ -33,24 +33,24 @@ namespace Kawashiro_Project.commands.modules
             yourMoneyParsed = Regex.Replace(yourMoneyParsed, "[^0-9.-]", "");
             if (string.IsNullOrEmpty(yourMoneyParsed))
             {
-                await ReplyAsync(string.Format(LineManager.GetLine("FlexMoneyNoNumber"), yourMoney, Context.User.Mention));
+                await ReplyAsync(string.Format(ResponseManager.GetLine("FlexMoneyNoNumber"), yourMoney, Context.User.Mention));
                 return;
             }
             BigInteger money = BigInteger.Parse(yourMoneyParsed);
             if (money < 0)
             {
-                await ReplyAsync(string.Format(LineManager.GetLine("FlexMoneyBrokeBitch"), money, Context.User.Mention));
+                await ReplyAsync(string.Format(ResponseManager.GetLine("FlexMoneyBrokeBitch"), money, Context.User.Mention));
                 return;
             }
-            uint addedAmount = (uint)Nitori.random.Next(1, int.MaxValue);
+            uint addedAmount = (uint)Nitori.Random.Next(1, int.MaxValue);
 
             try
             {
-                await ReplyAsync(string.Format(LineManager.GetLine("FlexMoneyResponse"), money + addedAmount, money, addedAmount, Context.User.Mention));
+                await ReplyAsync(string.Format(ResponseManager.GetLine("FlexMoneyResponse"), money + addedAmount, money, addedAmount, Context.User.Mention));
             }
             catch (ArgumentException)
             {
-                int randomChance = Nitori.random.Next(0, 1);
+                int randomChance = Nitori.Random.Next(0, 1);
                 if (randomChance == 0)
                 {
                     await channel.SendFileAsync("data\\jpow.gif", "My name is Jerome Powell of the US Federal Reserve and money printer goes __**BRRRRRRR**__");

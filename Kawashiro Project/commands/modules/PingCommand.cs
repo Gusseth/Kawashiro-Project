@@ -17,7 +17,7 @@ namespace Kawashiro_Project.commands.modules
         [Summary("Pong!")]
         public async Task Ping()
         {
-            await ReplyAsync(string.Format(LineManager.GetLine("PingResponse"), Context.Client.Latency));
+            await ReplyAsync(string.Format(ResponseManager.GetLine("PingResponse"), Context.Client.Latency));
         }
     }
 }

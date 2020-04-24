@@ -13,7 +13,7 @@ namespace Kawashiro_Project.commands.modules
 {
     public class AutoClearCommand : ModuleBase<SocketCommandContext>
     {
-        private readonly GuildManager guildManager = Nitori.guildManager;
+        private readonly GuildManager guildManager = Nitori.GuildManager;
         private SocketGuild guild;
         private string guildName;
 
@@ -45,7 +45,7 @@ namespace Kawashiro_Project.commands.modules
             }
             else
             {
-                await ReplyAsync(string.Format(LineManager.GetLine("ClearedChannelsNotExist"), guildName, channelName));
+                await ReplyAsync(string.Format(ResponseManager.GetLine("ClearedChannelsNotExist"), guildName, channelName));
             }
         }
 
@@ -70,7 +70,7 @@ namespace Kawashiro_Project.commands.modules
             }
             else
             {
-                await ReplyAsync(string.Format(LineManager.GetLine("ClearedChannelsNotExist"), guildName, channelID));
+                await ReplyAsync(string.Format(ResponseManager.GetLine("ClearedChannelsNotExist"), guildName, channelID));
             }
         }
 
@@ -83,7 +83,7 @@ namespace Kawashiro_Project.commands.modules
             {
                 EmbedBuilder embed = new EmbedBuilder()
                     .WithTitle($"**{guildName}** - Cleared Channels")
-                    .WithDescription(string.Format(LineManager.GetLine("ClearedChannelsDisplay"), guildName))
+                    .WithDescription(string.Format(ResponseManager.GetLine("ClearedChannelsDisplay"), guildName))
                     .WithAuthor(author =>
                     {
                         author
@@ -109,7 +109,7 @@ namespace Kawashiro_Project.commands.modules
             }
             else
             {
-                await ReplyAsync(string.Format(LineManager.GetLine("ClearedChannelsEmpty"), guildName));
+                await ReplyAsync(string.Format(ResponseManager.GetLine("ClearedChannelsEmpty"), guildName));
             }
         }
 
@@ -121,12 +121,12 @@ namespace Kawashiro_Project.commands.modules
                 if (kGuild.clearedChannels.Contains(channelID)) // Channel is removed if it is already being cleared
                 {
                     kGuild.clearedChannels.Remove(channelID);
-                    await ReplyAsync(string.Format(LineManager.GetLine("ClearedChannelsRemoved"), guildName, channel.Mention));
+                    await ReplyAsync(string.Format(ResponseManager.GetLine("ClearedChannelsRemoved"), guildName, channel.Mention));
                 }
                 else 
                 {
                     kGuild.clearedChannels.Add(channelID);
-                    await ReplyAsync(string.Format(LineManager.GetLine("ClearedChannelsAdded"), guildName, channel.Mention));
+                    await ReplyAsync(string.Format(ResponseManager.GetLine("ClearedChannelsAdded"), guildName, channel.Mention));
                 }
             }
             else
@@ -134,7 +134,7 @@ namespace Kawashiro_Project.commands.modules
                 // When the guild doesn't exist in guilds.json
                 kGuild = new KappaGuild(new ulong[] { channelID });
                 guildManager.guilds.Add(guild.Id, kGuild);
-                await ReplyAsync(string.Format(LineManager.GetLine("ClearedChannelsAdded"), guildName, channel.Mention));
+                await ReplyAsync(string.Format(ResponseManager.GetLine("ClearedChannelsAdded"), guildName, channel.Mention));
             }
             await guildManager.ReplaceGuildsJson();
         }

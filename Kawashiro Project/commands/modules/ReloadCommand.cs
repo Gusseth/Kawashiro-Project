@@ -18,7 +18,7 @@ namespace Kawashiro_Project.commands.modules
         [RequireOwner]
         public async Task Reload()
         {
-            await ReplyAsync(LineManager.GetLine("BotReload"));
+            await ReplyAsync(ResponseManager.GetLine("BotReload"));
             Nitori.ReloadConfig();
         }
     }

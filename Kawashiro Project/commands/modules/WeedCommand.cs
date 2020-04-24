@@ -27,15 +27,15 @@ namespace Kawashiro_Project.commands.modules
 
                 if (numFiles == 0)
                 {
-                    await Nitori.Say(Context.Channel, LineManager.GetLine("MediaFolderEmpty"));
+                    await Nitori.Say(Context.Channel, ResponseManager.GetLine("MediaFolderEmpty"));
                     return;
                 }
                 foreach (string file in mediaFolderContents)
                 {
                     filenames = filenames + file + "\n";
                 }
-                await Nitori.Say(Context.Channel, LineManager.GetLine("MediaFolderDisplay") +
-                    LineManager.GetLine("MediaFolderCodeblock"), filenames, numFiles);
+                await Nitori.Say(Context.Channel, ResponseManager.GetLine("MediaFolderDisplay") +
+                    ResponseManager.GetLine("MediaFolderCodeblock"), filenames, numFiles);
                 return;
             }
             else if (File.Exists(path))
@@ -43,7 +43,7 @@ namespace Kawashiro_Project.commands.modules
                 await Context.Channel.SendFileAsync(Path.Combine("data\\media\\" + filename));
                 return;
             }
-            await Nitori.Say(Context.Channel, LineManager.GetLine("FileNotFound"), filename);
+            await Nitori.Say(Context.Channel, ResponseManager.GetLine("FileNotFound"), filename);
         }
     }
 }
