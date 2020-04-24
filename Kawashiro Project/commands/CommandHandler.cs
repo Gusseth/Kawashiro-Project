@@ -63,11 +63,12 @@ namespace Kawashiro_Project.commands
             SocketCommandContext context = new SocketCommandContext(client, msg);
 
             int commandStart = Nitori.config.separatePrefix ? 
-                argPosition + 1 : argPosition;                                  // argPos + 1 so that the command and the prefix 
-                                                                                // are separate if separartePrefix is true
+                argPosition + 1 : argPosition;          // argPos + 1 so that the command and the prefix 
+                                                        // are separate if separartePrefix is true
             
-            _ = commandService.ExecuteAsync(context, commandStart, serviceProvider);  // Parses the command
-                                                                                                            
+            _ = commandService.ExecuteAsync(context, commandStart, serviceProvider);  // Parses the command in a separate thread, unawaited
+
+            await Task.CompletedTask;
             //await PostCommandExecution(result, context);
         }
 
