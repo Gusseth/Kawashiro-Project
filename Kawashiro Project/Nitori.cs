@@ -169,7 +169,7 @@ namespace Kawashiro_Project
             foreach (ulong channelID in kGuild.clearedChannels)
             {
                 SocketTextChannel channel = guild.GetTextChannel(channelID);
-                await channel.DeleteMessagesAsync(await channel.GetMessagesAsync(int.MaxValue).FlattenAsync());
+                _ =  channel.DeleteMessagesAsync(await channel.GetMessagesAsync(int.MaxValue).FlattenAsync());
             }
         }
     }
