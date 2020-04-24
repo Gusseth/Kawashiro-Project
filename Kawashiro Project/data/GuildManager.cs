@@ -45,7 +45,8 @@ namespace Kawashiro_Project.data
         /// </summary>
         public async Task ReplaceGuildsJson()
         {
-            await File.WriteAllTextAsync(GUILDS_PATH, JObject.FromObject(guilds).ToString());
+            _ = File.WriteAllTextAsync(GUILDS_PATH, JObject.FromObject(guilds).ToString());
+            await Task.CompletedTask;
         }
     }
 }
