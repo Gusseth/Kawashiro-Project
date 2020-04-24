@@ -1,5 +1,8 @@
 ﻿{
-  "configVersion":  0,
+  "configVersion": 0,
   "token": "",
-  "prefix": "!n"
+  "prefix": "n!",
+  "separatePrefix": true,
+  "deleteMessageInMs": 5000,
+  "rateDelayInMs": 100
 }

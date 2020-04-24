@@ -1,7 +1,9 @@
 ﻿{
   "About": [
-
+    "I, {0}, am created as a co-bot with MEE6 to address some of its limitations.\nI am the **{1}** iteration of the Project."
   ],
+
+  "BotReload": "Reloading all configs and lines...",
 
   "MediaFolderEmpty": "The media folder is empty.",
   "MediaFolderDisplay": "Here are the {1} files inside the media folder:\n",
@@ -9,23 +11,46 @@
 
   "FileNotFound": "The file '{0}' does not exist.",
 
+  "PingResponse": "Pong! ({0}ms)",
+
+  "ClearedChannelsEmpty": "There are no channels that are automatically cleared when {0} is inactive.",
+  "ClearedChannelsDisplay": "Here are the channels that are automatically cleared when {0} is inactive:\n",
+  "ClearedChannelsCodeblock": "```\n{0}```",
+  "ClearedChannelsAdded": [
+    "✅ {1} will now be cleared when everyone disconnects from every voice channel.",
+    "✅ {1} has been added to the list of channels to be cleared when everyone disconnects from call."
+  ],
+  "ClearedChannelsRemoved": [
+    "❌ {1} has been removed from auto-deletion.",
+    "❌ {1} will now be left alone when everyone disconnects."
+  ],
+  "ClearedChannelsNotExist": "The channel '{1}' doesn't exist in {0}!",
+
   "UnknownCommandError": [
     "I don't know what '{0}' is.",
     "What's a '{0}'?",
-    "Unknown command. Try '!n help' for a list of commands."
+    "Unknown command. Try '{3}help' for a list of commands."
   ],
   "CommandPermissionsError": [
-    "Sorry, but you are not a true administrator to use '{0}'.",
+    "Sorry, but you are not a **true administrator** to use '{0}'.",
     "Not so fast, {2}."
   ],
   "CommandExecutionError": [
     "The command {0}failed to execute.\n",
     "Huh? {0}failed to execute...\n"
   ],
+  "InvalidArgument": [
+    "{0} is an invalid argument. It must be {1}.",
+    "{0} is not allowed. It has to be {1}."
+  ],
 
   "NoReasonGiven": "No reason given.",
-  "ReasonGiven": "Reason: {1}",
+  "ReasonGiven": "**Reason:** {1}",
 
-  "DeleteMessageNumeric": "I've deleted {0} messages."
+  "DeleteMessageNumeric": "I've deleted **{0}** messages.",
 
+  "FlexMoneyResponse": "{3}, I currently have {0} units of units of flex money, which is {2} units more than what you currently have.",
+  "FlexMoneyBrokeBitch": "Get the fuck out of here with your broke ass.",
+  "FlexMoneyNoNumber":  "Weird flex but ok.",
+  "TooMuchFlexMoney": ""
 }
