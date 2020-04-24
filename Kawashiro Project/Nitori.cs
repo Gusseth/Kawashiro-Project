@@ -17,10 +17,11 @@ namespace Kawashiro_Project
     {
         public const string version = "0.2a";
 
-        public static Config config;                // Singleton Config class
-        public static LineManager lineManager;      // Singleton LineManager class
-        public static GuildManager guildManager;    // Singleton GuildManager class
-        public static Random random;                // Singleton Random class
+        public static Config Config { get; private set; }                // Singleton Config class
+        public static ResponseManager LineManager { get; private set; }  // Singleton LineManager class
+        public static GuildManager GuildManager { get; private set; }    // Singleton GuildManager class
+        public static Random Random { get; private set; }                // Singleton Random class
+        public static SocketSelfUser User { get; private set; }          // The Discord user of the bot
 
         protected DiscordSocketClient client;       // Client that is used to connect to Discord
         protected CommandService commandService;    // Base for all commands
@@ -53,15 +54,17 @@ namespace Kawashiro_Project
         {
             try
             {
-                random = new Random();
-                config = new Config(Config.CONFIG_PATH);
-                guildManager = new GuildManager(GuildManager.GUILDS_PATH);
-                lineManager = new LineManager(LineManager.LINES_PATH);
-                token = config.token;
+                Random = new Random();
+                Config = new Config(Config.CONFIG_PATH);
+                GuildManager = new GuildManager(GuildManager.GUILDS_PATH);
+                LineManager = new ResponseManager(ResponseManager.LINES_PATH, ResponseManager.EMBEDS_PATH);
+                token = Config.token;
 
-                client = new DiscordSocketClient(config.GetDiscordSocketConfig());
-                commandService = new CommandService(config.GetCommandServiceConfig());
+                client = new DiscordSocketClient(Config.GetDiscordSocketConfig());
+                commandService = new CommandService(Config.GetCommandServiceConfig());
                 serviceProvider = new ServiceCollection().AddSingleton(client).AddSingleton(commandService).BuildServiceProvider();
+
+                User = client.CurrentUser;
 
                 commandHandler = new CommandHandler(commandService, client, serviceProvider);
                 await commandHandler.Initialize();
@@ -139,10 +142,10 @@ namespace Kawashiro_Project
 
         public static void ReloadConfig()
         {
-            string oldToken = config.token;
-            config = new Config(Config.CONFIG_PATH);
-            lineManager = new LineManager(LineManager.LINES_PATH);
-            guildManager = new GuildManager(GuildManager.GUILDS_PATH);
+            string oldToken = Config.token;
+            Config = new Config(Config.CONFIG_PATH);
+            LineManager = new ResponseManager(ResponseManager.LINES_PATH, ResponseManager.EMBEDS_PATH);
+            GuildManager = new GuildManager(GuildManager.GUILDS_PATH);
         }
 
         /// <summary>
@@ -159,7 +162,7 @@ namespace Kawashiro_Project
             SocketGuild guild = before.VoiceChannel.Guild;
 
             KappaGuild kGuild;
-            guildManager.guilds.TryGetValue(guild.Id, out kGuild);  // Gets the guild persistent data
+            GuildManager.guilds.TryGetValue(guild.Id, out kGuild);  // Gets the guild persistent data
 
             foreach (SocketVoiceChannel voiceChannel in guild.VoiceChannels)
             {
