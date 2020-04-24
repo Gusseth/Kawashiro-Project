@@ -21,7 +21,7 @@ namespace Kawashiro_Project
         public static ResponseManager LineManager { get; private set; }  // Singleton LineManager class
         public static GuildManager GuildManager { get; private set; }    // Singleton GuildManager class
         public static Random Random { get; private set; }                // Singleton Random class
-        public static SocketSelfUser User { get; private set; }          // The Discord user of the bot
+        public static SocketSelfUser User { get; private set; }          // The bot Discord user
 
         protected DiscordSocketClient client;       // Client that is used to connect to Discord
         protected CommandService commandService;    // Base for all commands
