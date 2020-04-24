@@ -66,6 +66,84 @@ namespace Kawashiro_Project.data
         }
 
         /// <summary>
+        /// Builds an EmbedBuilder with the given json data
+        /// </summary>
+        /// <param name="embed">Embed JSON data</param>
+        /// <returns></returns>
+        public static EmbedBuilder BuildEmbed(JObject embed, params object[] args)
+        {
+            string title = embed.Value<string>("title");
+            string description = embed.Value<string>("description");
+            string url = embed.Value<string>("url");
+            uint color = embed.Value<uint>("color");
+            bool timestamp = embed.Value<bool?>("timestamp") ?? false;
+
+            JObject footer = embed.Value<JObject>("footer");
+
+            string thumbnail = embed.Value<string>("thumbnail");
+            string image = embed.Value<string>("image");
+
+            JObject author = embed.Value<JObject>("author");
+
+            JToken fields = embed["fields"];
+
+            EmbedBuilder embedBuilder = new EmbedBuilder();
+
+            embedBuilder
+                .WithTitle(title)               // Adds title
+                .WithDescription(description)   // Adds description
+                .WithUrl(url)                   // Adds a link with the title
+                .WithColor(color)               // Adds colour to the side of the embed
+                .WithThumbnailUrl(thumbnail)    // Adds the image to the top-right side
+                .WithImageUrl(image);           // Adds the larger image at the bottom of the embed
+
+            if (timestamp) embedBuilder.WithCurrentTimestamp(); // Adds timestamp with the current time and date
+
+            // Adding footer, if available
+            if (footer != null)
+            {
+                bool icon = footer.Value<bool?>("icon") ?? true;
+                string iconUrl = footer.Value<string>("iconUrl") ?? footer.Value<string>("icon_url") ?? Nitori.User.GetAvatarUrl(); // Defaults to user avatar if not provided
+                string text = footer.Value<string>("text");
+                _ = !icon ? embedBuilder.WithFooter(tempFooter => tempFooter.WithText(text)) :              // Without an icon
+                    embedBuilder.WithFooter(tempFooter => tempFooter.WithIconUrl(iconUrl).WithText(text));  // With an icon
+            }
+
+            // Adding the author header, if available
+            if (author != null)
+            {
+                string name = author.Value<string>("name");
+                string nameUrl = author.Value<string>("url");
+                bool icon = author.Value<bool?>("icon") ?? true;
+                string iconUrl = author.Value<string>("iconUrl") ?? author.Value<string>("icon_url") ?? Nitori.User.GetAvatarUrl();
+                _ = !icon ? embedBuilder.WithAuthor(tempAuthor => tempAuthor.WithName(name).WithUrl(nameUrl)) :  // Without an icon
+                    embedBuilder.WithAuthor(tempAuthor =>
+                    tempAuthor.WithIconUrl(iconUrl).WithName(name).WithUrl(nameUrl));                           // With an icon
+            }
+
+            // Adding fields that are defined in the template, if available
+            if (fields != null)
+            {
+                foreach (JObject field in fields)
+                {
+                    string name = field.Value<string>("name");
+                    string value = field.Value<string>("value");
+                    bool inline = field.Value<bool?>("inline") ?? false;
+                    embedBuilder.AddField(name, value, inline);
+                }
+            }
+
+            return embedBuilder;
+        }
+
+        /// <summary>
+        /// Builds an EmbedBuilder with the given json data
+        /// </summary>
+        /// <param name="embed">Embed JSON data as a string</param>
+        /// <returns></returns>
+        public static EmbedBuilder BuildEmbed(string json) => BuildEmbed(JObject.Parse(json));
+
+        /// <summary>
         /// Loads a json and parses strings into the lines dictionary
         /// </summary>
         /// <param name="json">JSON object for lines.json</param>
@@ -87,7 +165,7 @@ namespace Kawashiro_Project.data
         /// Loads a json and parses an embed into the embeds dictionary
         /// </summary>
         /// <param name="json">JSON object for embeds.json</param>
-        private void LoadEmbeds(JObject json)
+        private void LoadEmbeds(JObject json, params object[] args)
         {
             foreach (JProperty entry in json.Properties())
             {
@@ -95,63 +173,7 @@ namespace Kawashiro_Project.data
                 List<EmbedBuilder> addEmbeds = new List<EmbedBuilder>();
                 foreach (JObject embed in entry.Values<JObject>())
                 {
-                    string title = embed.Value<string>("title");
-                    string description = embed.Value<string>("description");
-                    string url = embed.Value<string>("url");
-                    uint color = embed.Value<uint>("color");
-                    bool timestamp = embed.Value<bool>("timestamp");
-
-                    JObject footer = embed.Value<JObject>("footer");
-
-                    string thumbnail = embed.Value<string>("thumbnail");
-                    string image = embed.Value<string>("image");
-
-                    JObject author = embed.Value<JObject>("author");
-
-                    EmbedBuilder embedBuilder = new EmbedBuilder();
-
-                    embedBuilder
-                        .WithTitle(title)               // Adds title
-                        .WithDescription(description)   // Adds description
-                        .WithUrl(url)                   // Adds a link with the title
-                        .WithColor(color)               // Adds colour to the side of the embed
-                        .WithThumbnailUrl(thumbnail)    // Adds the image to the top-right side
-                        .WithImageUrl(image);           // Adds the larger image at the bottom of the embed
-
-                    if (timestamp) embedBuilder.WithCurrentTimestamp(); // Adds timestamp with the current time and date
-
-                    // Adding footer, if available
-                    if (footer != null)
-                    {
-                        bool icon = footer.Value<bool?>("icon") ?? true;
-                        string iconUrl = footer.Value<string>("iconUrl") ?? Nitori.User.GetAvatarUrl();         // Defaults to user avatar if not provided
-                        string text = footer.Value<string>("text");
-                        _ = !icon ? embedBuilder.WithFooter(tempFooter => tempFooter.WithText(text)) :              // Without an icon
-                            embedBuilder.WithFooter(tempFooter => tempFooter.WithIconUrl(iconUrl).WithText(text));  // With an icon
-                    }
-
-                    // Adding the author header, if available
-                    if (author != null)
-                    {
-                        string name = author.Value<string>("name");
-                        string nameUrl = footer.Value<string>("url");
-                        bool icon = footer.Value<bool?>("icon") ?? true;
-                        string iconUrl = footer.Value<string>("iconUrl") ?? Nitori.User.GetAvatarUrl();
-                        _ = !icon ? embedBuilder.WithAuthor(tempAuthor => tempAuthor.WithName(name).WithUrl(nameUrl)) :  // Without an icon
-                            embedBuilder.WithAuthor(tempAuthor => 
-                            tempAuthor.WithIconUrl(iconUrl).WithName(name).WithUrl(nameUrl));                           // With an icon
-                    }
-
-                    // Adding fields that are defined in the template, if available
-                    foreach (JObject field in embed["fields"])
-                    {
-                        string name = field.Value<string>("name");
-                        string value = field.Value<string>("value");
-                        bool inline = field.Value<bool?>("inline") ?? false;
-                        embedBuilder.AddField(name, value, inline);
-                    }
-
-                    addEmbeds.Add(embedBuilder);
+                    addEmbeds.Add(BuildEmbed(embed));
                 }
                 embeds.Add(key, addEmbeds);
             }
