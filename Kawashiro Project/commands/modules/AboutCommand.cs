@@ -11,6 +11,8 @@ namespace Kawashiro_Project.commands.modules
 {
     public class AboutCommand : ModuleBase<SocketCommandContext>
 	{
+		private static Embed embedSingleton; // This will be the only instance as you cannot define commands at the time of writing.
+
 		/// <summary>
 		/// Displays an embed that shows a description about the bot, the project, and a list of commands
 		/// </summary>
@@ -21,7 +23,7 @@ namespace Kawashiro_Project.commands.modules
         {
 			string avatarURL = Context.Client.CurrentUser.GetAvatarUrl();
 
-			var builder = new EmbedBuilder()
+			embedSingleton ??= new EmbedBuilder()
 			.WithTitle("**The Kawashiro Project** - A Multipurpose Bot")
 			.WithDescription(string.Format(ResponseManager.GetLine("About"), "Nitori Kawashiro", Nitori.version))
 			.WithUrl("https://github.com/Gusseth/Kawashiro-Project/tree/master/Kawashiro%20Project")
@@ -45,12 +47,10 @@ namespace Kawashiro_Project.commands.modules
 			.AddField("🎚️autoclear/ac", "<channel>\nMention a channel to toggle auto-clear.", true)
 			.AddField("🌿weed", "<filename> or dir\nUploads local files!", true)
 			.AddField("🏓ping", "No args.\nReturns a 'Pong!'", true)
-			.AddField("🤑flexmoney", "<natural>\nFlex cash on the bot.", true);
-			var embed = builder.Build();
-			await Context.Channel.SendMessageAsync(
-					null,
-					embed: embed)
-					.ConfigureAwait(false);
+			.AddField("🤑flexmoney", "<natural>\nFlex cash on the bot.", true)
+			.Build();
+
+			await Context.Channel.SendMessageAsync(null, embed: embedSingleton).ConfigureAwait(false);
 
 		}
 
