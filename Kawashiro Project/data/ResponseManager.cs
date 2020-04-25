@@ -70,12 +70,12 @@ namespace Kawashiro_Project.data
         /// </summary>
         /// <param name="embed">Embed JSON data</param>
         /// <returns></returns>
-        public static EmbedBuilder BuildEmbed(JObject embed, params object[] args)
+        public static EmbedBuilder BuildEmbedBuilder(JObject embed, params object[] args)
         {
             string title = embed.Value<string>("title");
             string description = embed.Value<string>("description");
             string url = embed.Value<string>("url");
-            uint color = embed.Value<uint>("color");
+            uint color = embed.Value<uint?>("color") ?? 6798951;
             bool timestamp = embed.Value<bool?>("timestamp") ?? false;
 
             JObject footer = embed.Value<JObject>("footer");
@@ -141,7 +141,7 @@ namespace Kawashiro_Project.data
         /// </summary>
         /// <param name="embed">Embed JSON data as a string</param>
         /// <returns></returns>
-        public static EmbedBuilder BuildEmbed(string json) => BuildEmbed(JObject.Parse(json));
+        public static EmbedBuilder BuildEmbed(string json) => BuildEmbedBuilder(JObject.Parse(json));
 
         /// <summary>
         /// Loads a json and parses strings into the lines dictionary
@@ -173,7 +173,7 @@ namespace Kawashiro_Project.data
                 List<EmbedBuilder> addEmbeds = new List<EmbedBuilder>();
                 foreach (JObject embed in entry.Values<JObject>())
                 {
-                    addEmbeds.Add(BuildEmbed(embed));
+                    addEmbeds.Add(BuildEmbedBuilder(embed));
                 }
                 embeds.Add(key, addEmbeds);
             }
