@@ -100,7 +100,7 @@ namespace Kawashiro_Project.commands.modules
                             .WithUrl("https://github.com/Gusseth/Kawashiro-Project/tree/master/Kawashiro%20Project")
                             .WithIconUrl(avatarURL);
                     })
-                    .WithColor(new Color(0x67BE67))
+                    .WithColor(6798951)
                     .WithCurrentTimestamp()
                     .WithFooter(footer =>
                     {
