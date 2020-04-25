@@ -22,6 +22,8 @@ namespace Kawashiro_Project.data
         public int deleteMessageInMs { get; private set; }  // Deletes temporary messages in x milliseconds
         public int rateDelayInMs { get; private set; }      // Delay to avoid rate limit
 
+        public string[] pollEmotes { get; private set; }    // Emotes to use in polls
+
         private uint configVersion { get; set; }    // The version of the config to determine if a rewrite is necessary.
 
         private JObject config;                     // The entire config as a json object.
@@ -51,6 +53,9 @@ namespace Kawashiro_Project.data
             authorID = config.Value<ulong>("authorID");
             deleteMessageInMs = config.Value<int>("deleteMessageInMs");
             rateDelayInMs = config.Value<int>("rateDelayInMs");
+            pollEmotes = (config["pollEmotes"] != null) ? 
+                config["pollEmotes"].ToObject<string[]>() : 
+                new string[] { "1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣" };
 
             if (configVersion != CURRENT_CONFIG_VERSION)
             {
