@@ -21,18 +21,18 @@ namespace Kawashiro_Project.data
 
         private static Dictionary<string, List<string>> lines;
         private static Dictionary<string, List<EmbedBuilder>> embeds;
+        private string embedsPath;
 
         public ResponseManager(string linesPath, string embedsPath)
         {
             linesPath = KappaIO.EnsureFileExists(linesPath, Resources.lines, "lines.json is not found in the data folder! Building lines.json...");
             lines = new Dictionary<string, List<string>>();
             embeds = new Dictionary<string, List<EmbedBuilder>>();
+            this.embedsPath = embedsPath;
 
             // Might make these two be laoded in separate threads in the future
             JObject linesJson = JObject.Parse(File.ReadAllTextAsync(linesPath).Result);
-            JObject embedsJson = JObject.Parse(File.ReadAllTextAsync(embedsPath).Result);
             LoadLines(linesJson);
-            LoadEmbeds(embedsJson);
         }
 
         /// <summary>
@@ -144,6 +144,15 @@ namespace Kawashiro_Project.data
         public static EmbedBuilder BuildEmbed(string json) => BuildEmbedBuilder(JObject.Parse(json));
 
         /// <summary>
+        /// Meant to be fired after the Discord client is connected to the API.
+        /// </summary>
+        public void LoadEmbeds()
+        {
+            JObject embedsJson = JObject.Parse(File.ReadAllTextAsync(embedsPath).Result);
+            _ = LoadEmbeds(embedsJson);
+        }
+
+        /// <summary>
         /// Loads a json and parses strings into the lines dictionary
         /// </summary>
         /// <param name="json">JSON object for lines.json</param>
@@ -165,7 +174,7 @@ namespace Kawashiro_Project.data
         /// Loads a json and parses an embed into the embeds dictionary
         /// </summary>
         /// <param name="json">JSON object for embeds.json</param>
-        private void LoadEmbeds(JObject json, params object[] args)
+        private async Task LoadEmbeds(JObject json, params object[] args)
         {
             foreach (JProperty entry in json.Properties())
             {
@@ -177,6 +186,7 @@ namespace Kawashiro_Project.data
                 }
                 embeds.Add(key, addEmbeds);
             }
+            await Task.CompletedTask;
         }
     }
 }
