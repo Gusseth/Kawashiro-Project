@@ -18,10 +18,10 @@ namespace Kawashiro_Project
         public const string version = "0.2a";
 
         public static Config Config { get; private set; }                // Singleton Config class
-        public static ResponseManager LineManager { get; private set; }  // Singleton LineManager class
+        public static ResponseManager ResponseManager { get; private set; }  // Singleton LineManager class
         public static GuildManager GuildManager { get; private set; }    // Singleton GuildManager class
         public static Random Random { get; private set; }                // Singleton Random class
-        public static SocketSelfUser User { get; private set; }          // The bot Discord user
+        public static IUser User { get; private set; }          // The bot Discord user
 
         protected DiscordSocketClient client;       // Client that is used to connect to Discord
         protected CommandService commandService;    // Base for all commands
@@ -38,7 +38,7 @@ namespace Kawashiro_Project
         /// <returns></returns>
         public async Task MainAsync()
         {
-            if (Initialize().Result)
+            if (await Initialize())
             {
                 LogIn();
             }
@@ -57,20 +57,21 @@ namespace Kawashiro_Project
                 Random = new Random();
                 Config = new Config(Config.CONFIG_PATH);
                 GuildManager = new GuildManager(GuildManager.GUILDS_PATH);
-                LineManager = new ResponseManager(ResponseManager.LINES_PATH, ResponseManager.EMBEDS_PATH);
                 token = Config.token;
 
                 client = new DiscordSocketClient(Config.GetDiscordSocketConfig());
                 commandService = new CommandService(Config.GetCommandServiceConfig());
                 serviceProvider = new ServiceCollection().AddSingleton(client).AddSingleton(commandService).BuildServiceProvider();
 
-                User = client.CurrentUser;
-
                 commandHandler = new CommandHandler(commandService, client, serviceProvider);
                 await commandHandler.Initialize();
 
                 client.Log += Debug.Log;
                 client.UserVoiceStateUpdated += OnUserVoiceStateUpdated;
+                client.Ready += () => { 
+                    User = client.CurrentUser; 
+                    ResponseManager = new ResponseManager(ResponseManager.LINES_PATH, ResponseManager.EMBEDS_PATH); // One hell of a hackjob since client.CurrentUser is only updated
+                    return Task.CompletedTask; };                                                                   // once the client is ready, might change later
                 return true;
             }
             catch (OutdatedConfigException)
@@ -144,7 +145,7 @@ namespace Kawashiro_Project
         {
             string oldToken = Config.token;
             Config = new Config(Config.CONFIG_PATH);
-            LineManager = new ResponseManager(ResponseManager.LINES_PATH, ResponseManager.EMBEDS_PATH);
+            ResponseManager = new ResponseManager(ResponseManager.LINES_PATH, ResponseManager.EMBEDS_PATH);
             GuildManager = new GuildManager(GuildManager.GUILDS_PATH);
         }
 
