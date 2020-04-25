@@ -26,22 +26,17 @@ namespace Kawashiro_Project.commands.modules
         [Alias("AC")]
         [Summary("Toggles the channel for auto-deletion when everyone disconnects from all calls. Uses mentions.")]
         [RequireUserPermission(GuildPermission.Administrator)]
-        public async Task AutoClear(string channelName = "view")
+        public async Task AutoClear(string channelName)
         {
             guild = Context.Guild;
             guildName = guild.Name;
             ulong channelID;
 
-            if (channelName == "view")
-            {
-                await DisplayClearedChannels();
-                return;
-            }
-            else if (MentionUtils.TryParseChannel(channelName, out channelID))
+            if (MentionUtils.TryParseChannel(channelName, out channelID))
             {
                 SocketTextChannel channel = guild.GetTextChannel(channelID);
 
-                await ToggleChannel(channel, channelID);
+                await ToggleChannel(channel);
             }
             else
             {
@@ -66,12 +61,26 @@ namespace Kawashiro_Project.commands.modules
 
             if (channel != null)
             {
-                await ToggleChannel(channel, channelID);
+                await ToggleChannel(channel);
             }
             else
             {
                 await ReplyAsync(string.Format(ResponseManager.GetLine("ClearedChannelsNotExist"), guildName, channelID));
             }
+        }
+
+        /// <summary>
+        /// Displays the channels that are automatically cleared.
+        /// </summary>
+        /// <returns></returns>
+        [Command("AutoClear", true)]
+        [Alias("AC")]
+        [Summary("Displays the channels that are automatically cleared.")]
+        public async Task AutoClear()
+        {
+            guild = Context.Guild;
+            guildName = guild.Name;
+            await DisplayClearedChannels();
         }
 
         private async Task DisplayClearedChannels()
@@ -113,17 +122,25 @@ namespace Kawashiro_Project.commands.modules
             }
         }
 
-        private async Task ToggleChannel(SocketTextChannel channel, ulong channelID)
+        /// <summary>
+        /// Checks the given channel if it's already autocleared.
+        ///     if true, then remove the channel from auto-clear
+        ///     if false, then add the channel to auto-clear
+        ///     if the guild does not exist, make the guild and put the channel to auto-clear
+        /// </summary>
+        /// <param name="channel">The text channel to be toggled.</param>
+        /// <returns></returns>
+        private async Task ToggleChannel(SocketTextChannel channel)
         {
-            KappaGuild kGuild;
-            if (guildManager.guilds.TryGetValue(guild.Id, out kGuild))
+            ulong channelID = channel.Id;
+            if (guildManager.guilds.TryGetValue(guild.Id, out KappaGuild kGuild))
             {
                 if (kGuild.clearedChannels.Contains(channelID)) // Channel is removed if it is already being cleared
                 {
                     kGuild.clearedChannels.Remove(channelID);
                     await ReplyAsync(string.Format(ResponseManager.GetLine("ClearedChannelsRemoved"), guildName, channel.Mention));
                 }
-                else 
+                else
                 {
                     kGuild.clearedChannels.Add(channelID);
                     await ReplyAsync(string.Format(ResponseManager.GetLine("ClearedChannelsAdded"), guildName, channel.Mention));
