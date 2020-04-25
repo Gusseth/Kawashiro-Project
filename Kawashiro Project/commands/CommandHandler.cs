@@ -45,8 +45,8 @@ namespace Kawashiro_Project.commands
         /// <returns></returns>
         private async Task HandleCommandAsync(SocketMessage message)
         {
-            SocketUserMessage msg = message as SocketUserMessage;
             if (message == null) return;    // If the message is a system message, reject immediately
+            SocketUserMessage msg = message as SocketUserMessage;
 
             bool prefixGuard = Nitori.Config.separatePrefix ? 
                 (msg.HasStringPrefix(Nitori.Config.prefix, ref argPosition)     // Confirms that the prefix is spearated as otherwise <prefix>ogpes is accepted.
