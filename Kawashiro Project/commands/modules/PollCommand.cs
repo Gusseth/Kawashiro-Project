@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Kawashiro_Project.data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,13 +24,20 @@ namespace Kawashiro_Project.commands.modules
         [Summary("Creates a 20-second poll.")]
         public async Task Poll(string title, string prompt, params string[] options)
         {
-            await Context.Message.DeleteAsync();
+            string[] configEmotes = Nitori.Config.pollEmotes;
+            if (options.Length > configEmotes.Length)
+            {
+                await ReplyAsync(string.Format(ResponseManager.GetLine("PollTooManyArgs"), options.Length, configEmotes.Length));
+                return;
+            }
+
+            //await Context.Message.DeleteAsync();
             SocketUser pollOwner = Context.User;
             SocketUser bot = Context.Client.CurrentUser;
             IEmote[] emotes = new IEmote[options.Length];
 
             EmbedBuilder embed = new EmbedBuilder()
-                .WithTitle(title)
+                .WithTitle("📊 " + title)
                 .WithDescription(prompt)
                 .WithAuthor(author => author.WithName($"{pollOwner.Username} started a poll:").WithIconUrl(pollOwner.GetAvatarUrl()))
                 .WithColor(6798951)
@@ -40,7 +48,7 @@ namespace Kawashiro_Project.commands.modules
             int count = 0;  // Too lazy to make an actual for loop lmao
             foreach (string option in options)
             {
-                string emoteString = Nitori.Config.pollEmotes[count];
+                string emoteString = configEmotes[count];
                 IEmote emote;
                 if (Emote.TryParse(emoteString, out Emote e)) emote = e;
                 else emote = new Emoji(emoteString);
@@ -71,14 +79,14 @@ namespace Kawashiro_Project.commands.modules
             winningVote = score.Max();
 
             EmbedBuilder resultEmbed = new EmbedBuilder()
-                .WithTitle($"Results for {title}")
+                .WithTitle($"📊 Results for {title}")
                 .WithAuthor(author => author.WithName($"{pollOwner.Username}'s poll:").WithIconUrl(pollOwner.GetAvatarUrl()))
                 .WithCurrentTimestamp()
                 .WithFooter(footer => footer.WithText("A bot tailored for /r/weather").WithIconUrl(bot.GetAvatarUrl()));
             if (score.All(x => x == 0))
             {
                 resultEmbed.WithColor(13576232)
-                    .WithDescription("❌ No one voted!");
+                    .WithDescription(ResponseManager.GetLine("PollResultNoVotes"));
             }
             else if (score.Count(x => x == winningVote) > 1)
             {
@@ -94,14 +102,14 @@ namespace Kawashiro_Project.commands.modules
                 }
 
                 resultEmbed.WithColor(13576232)
-                    .WithDescription("❌ A tie in the vote occurred!");
+                    .WithDescription(ResponseManager.GetLine("PollResultTie"));
             }
             else
             {
                 int index = Array.IndexOf(score, winningVote);
                 IEmote emote = emotes[index];
                 resultEmbed.WithColor(6798951)
-                    .WithDescription("✅ Winner winner, prison dinner:")
+                    .WithDescription(ResponseManager.GetLine("PollResultSuccess"))
                     .AddField($"{emote.Name} - {options[index]}", $"{winningVote} votes.");
             }
 
