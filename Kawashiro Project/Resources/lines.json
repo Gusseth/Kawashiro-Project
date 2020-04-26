@@ -51,6 +51,11 @@
 
   "FlexMoneyResponse": "{3}, I currently have {0} units of units of flex money, which is {2} units more than what you currently have.",
   "FlexMoneyBrokeBitch": "Get the fuck out of here with your broke ass.",
-  "FlexMoneyNoNumber":  "Weird flex but ok.",
-  "TooMuchFlexMoney": ""
+  "FlexMoneyNoNumber": "Weird flex but ok.",
+  "TooMuchFlexMoney": "",
+
+  "PollResultSuccess": "✅ Winner winner, prison dinner:",
+  "PollResultTie": "❌ A tie in the vote occurred!",
+  "PollResultNoVotes": "❌ No one voted!",
+  "PollTooManyArgs": "Sorry, but there are too many options for the amount of emotes defined in the config. There can only be at most {1} options."
 }
