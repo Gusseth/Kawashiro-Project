@@ -70,10 +70,7 @@ namespace Kawashiro_Project
 
                 client.Log += Debug.Log;
                 client.UserVoiceStateUpdated += OnUserVoiceStateUpdated;
-                client.Ready += () => { 
-                    User = client.CurrentUser;
-                    ResponseManager.LoadEmbeds();   // Loads the embeds
-                    return Task.CompletedTask; };
+                client.Ready += OnReady;
                 return true;
             }
             catch (OutdatedConfigException)
@@ -143,6 +140,9 @@ namespace Kawashiro_Project
             await channel.SendMessageAsync(string.Format(msg, args));
         }
 
+        /// <summary>
+        /// Reloads all configs. Need I say more?
+        /// </summary>
         public static void ReloadConfig()
         {
             string oldToken = Config.token;
@@ -153,31 +153,42 @@ namespace Kawashiro_Project
         }
 
         /// <summary>
-        /// Fires when 
+        /// Fires when a user joins/leaves a voice channel
         /// </summary>
         /// <param name="user">User that is responsible for this event being fired</param>
         /// <param name="before">The user's previous state</param>
         /// <param name="after">The user's current state</param>
         /// <returns></returns>
-        public static async Task OnUserVoiceStateUpdated(SocketUser user, SocketVoiceState before, SocketVoiceState after)
+        public async Task OnUserVoiceStateUpdated(SocketUser user, SocketVoiceState before, SocketVoiceState after)
         {
             if (after.VoiceChannel != null) return; // Do nothing if no one left
 
             SocketGuild guild = before.VoiceChannel.Guild;
 
-            KappaGuild kGuild;
-            GuildManager.guilds.TryGetValue(guild.Id, out kGuild);  // Gets the guild persistent data
-
-            foreach (SocketVoiceChannel voiceChannel in guild.VoiceChannels)
+            if (GuildManager.guilds.TryGetValue(guild.Id, out KappaGuild kGuild))  // Gets the guild persistent data
             {
-                if (voiceChannel.Users.Count > 0) return;  // Do nothing if there is a channel with people connected
-            }
+                foreach (SocketVoiceChannel voiceChannel in guild.VoiceChannels)
+                {
+                    if (voiceChannel.Users.Count > 0) return;  // Do nothing if there is a channel with people connected
+                }
 
-            foreach (ulong channelID in kGuild.clearedChannels)
-            {
-                SocketTextChannel channel = guild.GetTextChannel(channelID);
-                _ =  channel.DeleteMessagesAsync(await channel.GetMessagesAsync(int.MaxValue).FlattenAsync());
+                foreach (ulong channelID in kGuild.clearedChannels)
+                {
+                    SocketTextChannel channel = guild.GetTextChannel(channelID);
+                    _ = channel.DeleteMessagesAsync(await channel.GetMessagesAsync(int.MaxValue).FlattenAsync());
+                }
             }
+        }
+
+        /// <summary>
+        /// Fires when the client is done connecting to the API
+        /// </summary>
+        /// <returns></returns>
+        public async Task OnReady()
+        {
+            User = client.CurrentUser;
+            ResponseManager.LoadEmbeds();   // Loads the embeds late because it depends on grabbing the current user's avatar
+            await Task.CompletedTask;
         }
     }
 }
