@@ -15,14 +15,14 @@ namespace Kawashiro_Project.data
         public const string CONFIG_PATH = "data\\config.json"; // Hardcoded config path.
         public const uint CURRENT_CONFIG_VERSION = 0;          // Used to determine if a config is outdated.
 
-        public ulong authorID { get; private set; }         // Current token the bot uses.
+        //public ulong authorID { get; private set; }         // Current token the bot uses.
         public string token { get; private set; }           // Current token the bot uses.
         public string prefix { get; private set; }          // Bot prefix
         public bool separatePrefix { get; private set; }    // Should bot prefix be separate
         public int deleteMessageInMs { get; private set; }  // Deletes temporary messages in x milliseconds
         public int rateDelayInMs { get; private set; }      // Delay to avoid rate limit
 
-        public string[] pollEmotes { get; private set; }    // Emotes to use in polls
+        public string[] pollEmotes { get; private set; }    // Emotes to use in choosing poll options
 
         private uint configVersion { get; set; }    // The version of the config to determine if a rewrite is necessary.
 
@@ -46,16 +46,18 @@ namespace Kawashiro_Project.data
         {
             config = JObject.Parse(File.ReadAllTextAsync(path).Result);
 
-            token = config.Value<string>("token");
-            configVersion = config.Value<uint>("configVersion");
-            prefix = config.Value<string>("prefix");
-            separatePrefix = config.Value<bool>("separatePrefix");
-            authorID = config.Value<ulong>("authorID");
-            deleteMessageInMs = config.Value<int>("deleteMessageInMs");
-            rateDelayInMs = config.Value<int>("rateDelayInMs");
-            pollEmotes = (config["pollEmotes"] != null) ? 
-                config["pollEmotes"].ToObject<string[]>() : 
-                new string[] { "1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣" };
+            token = config.Value<string>("token");                          // Bot token
+            configVersion = config.Value<uint>("configVersion");            // Config version, determines if the config has to be overwritten
+            prefix = config.Value<string>("prefix");                        // Command prefix
+            separatePrefix = config.Value<bool>("separatePrefix");          // Should the prefix be a separate word from the command word?
+            //authorID = config.Value<ulong>("authorID");                     // ??? I don't remember why I added this lmao
+            deleteMessageInMs = config.Value<int>("deleteMessageInMs");     // Deletes temporary messages in x milliseconds
+            rateDelayInMs = config.Value<int>("rateDelayInMs");             // The time in ms that is used as a buffer between a looped async to prevent hitting the rate limit
+
+            JToken pollEmotesJson = config["pollEmotes"];       // Here so that computation is not wasted
+            pollEmotes = (pollEmotesJson != null) ?             // Checks if the pollEmotes property is defined
+                pollEmotesJson.ToObject<string[]>() :           // Grabs the value if it is defined
+                new string[] { "1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣" };   // Otherwise, use default values
 
             if (configVersion != CURRENT_CONFIG_VERSION)
             {
