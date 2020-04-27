@@ -25,9 +25,11 @@ The following list will be the main scope for Nitori:
 - Polls of multiple choice.
 
 ## Commands:
-- 🗑️delete/del `<int> or <messageID>`. Needs Manage Message permission. Deletion by messageID is **EXCLUSIVE** meaning the message where the ID belongs to __will not be deleted__. Works even with messages older than 2 weeks old! Uses the API-given BulkDelete to delete messages newer than 2 weeks old, then individually deletes older messages. Blame the Discord API for this.
+- 🗑️delete/del `Manage Message:<int> or Manage Message:<messageID>`. Deletion by messageID is **EXCLUSIVE** meaning the message where the ID belongs to __will not be deleted__. Works even with messages older than 2 weeks old! Uses the API-given BulkDelete to delete messages newer than 2 weeks old, then individually deletes older messages. Blame the Discord API for this.
+- 📋🗑️pdelete/pd `Manage Message:<list of messageIDs>`. Precision delete. Deletes messages from the given messageIDs.
 - 🎚️autoclear/ac `Administrator:<channel mention> or Administrator:<channelID> or <none>`. Toggles the channel for auto-clearing once everyone disconnects from every voice channel. If no args are given, displays all channels that are in the list.
 - 📊poll `<title> <prompt> <"options">`. Creates a 20 second poll. Emotes are customizable and number of options are limited to the amount of emotes defined. Surround quotation marks to "multi-word statements" to pass it as one argument.
+- ❓about/help `<none>`. Shows information about the bot and the list of commands.
 - 📣echo `<any length string>`. Bot parrots whatever you say. Mentions work and standard Discord markdown works.
 - 🌿weed `<filename> or <none>/<"dir">`. Uploads a file from data/media that is less than 8 MB. If no args or "dir" was passed as an argument, then displays the files in the media folder.
 - 🏓ping `<none>`. Bot replies with "Pong!" and the latency between the bot and the API service.
