@@ -31,6 +31,6 @@ The following list will be the main scope for Nitori:
 - 📣echo `<any length string>`. Bot parrots whatever you say. Mentions work and standard Discord markdown works.
 - 🌿weed `<filename> or <none>/<"dir">`. Uploads a file from data/media that is less than 8 MB. If no args or "dir" was passed as an argument, then displays the files in the media folder.
 - 🏓ping `<none>`. Bot replies with "Pong!" and the latency between the bot and the API service.
-- 🤑flexmoney `<number>`. Bot will always respond with a value higher than yours by 1 to 2^31. RegEx checked, will ignore non-digits and non-negative characters. If a negative value is inputted, the bot will berate you for being broke. If an input with no numbers is inputted, then the bot will call out your weird flex."
+- 🤑flexmoney `<number>`. Bot will always respond with a value higher than yours by 1 to 2^31. RegEx checked, will ignore non-digits and non-negative characters. If a negative value is inputted, the bot will berate you for being broke. If an input with no numbers is inputted, the bot will call out your weird flex.
 - ↩️reload `Bot Owner:<none>`. Bot will re-read config.json, lines.json, embeds.json, and guilds.json.
 - 📄embed `<key> or <"parse"> <json>`. Bot will load the given key defined in embeds.json. If "parse" and a [properly formatted](https://leovoel.github.io/embed-visualizer/) json object is inputted, then it loads the given json object into an embed.
