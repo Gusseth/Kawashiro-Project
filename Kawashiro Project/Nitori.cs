@@ -9,6 +9,7 @@ using Kawashiro_Project.util;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Kawashiro_Project
@@ -18,11 +19,12 @@ namespace Kawashiro_Project
         public const string version = "0.3rc1";
 
         public static Config Config { get; private set; }                   // Singleton Config class
-        public static ResponseManager ResponseManager { get; private set; }  // Singleton LineManager class
+        public static ResponseManager ResponseManager { get; private set; } // Singleton LineManager class
         public static GuildManager GuildManager { get; private set; }       // Singleton GuildManager class
         public static Random Random { get; private set; }                   // Singleton Random class
         public static IUser User { get; private set; }                      // The bot Discord user
         public static DiscordSocketClient Client { get; private set; }      // The Discord client
+        public static HttpClient HttpClient { get; private set; }           // The HttpClient singleton, used for downloading files
 
         protected DiscordSocketClient client;       // Client that is used to connect to Discord
         protected CommandService commandService;    // Base for all commands
@@ -56,6 +58,7 @@ namespace Kawashiro_Project
             try
             {
                 Random = new Random();
+                HttpClient = new HttpClient();
                 Config = new Config(Config.CONFIG_PATH);
                 GuildManager = new GuildManager(GuildManager.GUILDS_PATH);
                 ResponseManager = new ResponseManager(ResponseManager.LINES_PATH, ResponseManager.EMBEDS_PATH); // One hell of a hackjob since client.CurrentUser is only updated
@@ -63,7 +66,7 @@ namespace Kawashiro_Project
 
                 client = new DiscordSocketClient(Config.GetDiscordSocketConfig());
                 commandService = new CommandService(Config.GetCommandServiceConfig());
-                serviceProvider = new ServiceCollection().AddSingleton(client).AddSingleton(commandService).BuildServiceProvider();
+                serviceProvider = new ServiceCollection().AddSingleton(client).AddSingleton(commandService).AddSingleton(HttpClient).BuildServiceProvider();
 
                 commandHandler = new CommandHandler(commandService, client, serviceProvider);
                 await commandHandler.Initialize();
