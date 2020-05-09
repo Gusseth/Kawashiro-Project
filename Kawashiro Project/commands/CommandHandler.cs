@@ -66,24 +66,19 @@ namespace Kawashiro_Project.commands
                 argPosition + 1 : argPosition;          // argPos + 1 so that the command and the prefix 
                                                         // are separate if separartePrefix is true
             
-            _ = commandService.ExecuteAsync(context, commandStart, serviceProvider);  // Parses the command in a separate thread, unawaited
+            _ = commandService.ExecuteAsync(context, commandStart, serviceProvider);  // Parses the command in a separate thread, unawaited.
+                                                                                      // This means that each running command are handled in separate
+                                                                                      // threads, not gridlocking the main thread of the bot.
 
             await Task.CompletedTask;
-            //await PostCommandExecution(result, context);
         }
 
-        /*
         /// <summary>
         /// Fires when the command is done executing.
         /// </summary>
         /// <param name="result">Result of the command</param>
         /// <param name="context">The message behind the command</param>
         /// <returns></returns>
-        private async Task PostCommandExecution(IResult result, SocketCommandContext context)
-        {
-            if (result.Error != null) await ParseCommandErrors(context, result.Error, result.ErrorReason);
-        }
-        */
         public async Task OnCommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
         {
             if (!string.IsNullOrEmpty(result?.ErrorReason))
