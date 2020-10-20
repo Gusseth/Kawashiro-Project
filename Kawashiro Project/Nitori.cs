@@ -74,6 +74,8 @@ namespace Kawashiro_Project
                 client.Log += Debug.Log;
                 client.UserVoiceStateUpdated += OnUserVoiceStateUpdated;
                 client.Ready += OnReady;
+
+                PostInit();
                 return true;
             }
             catch (OutdatedConfigException)
@@ -89,6 +91,14 @@ namespace Kawashiro_Project
                 await Debug.Log(new LogMessage(LogSeverity.Critical, "init", "This program has spectacularly failed on startup:", e));
             }
             return false;
+        }
+
+        /// <summary>
+        /// Fires when the bot is done loading
+        /// </summary>
+        private void PostInit()
+        {
+
         }
 
         /// <summary>
@@ -191,7 +201,41 @@ namespace Kawashiro_Project
         {
             User = client.CurrentUser;
             ResponseManager.LoadEmbeds();   // Loads the embeds late because it depends on grabbing the current user's avatar
+            _ = StartupGC();
             await Task.CompletedTask;
         }
+
+        /// <summary>
+        /// Prompts Garbage collection to run a cycle.
+        /// </summary>
+        /// <param name="forced">True to force a collection cycle, false for deterministic collection.</param>
+        public static void CallGC(bool forced = true)
+        {
+            if (forced)
+            {
+                Debug.Log("Forcing garbage collection...");
+                GC.Collect();
+                return;
+            }
+            GC.Collect(2, GCCollectionMode.Optimized);
+        }
+
+        bool firstStartupGC = true;
+
+        /// <summary>
+        /// Clears about 30 MB of memory from Discord startup by running GC twice.
+        /// </summary>
+        /// <returns></returns>
+        private async Task StartupGC()
+        {
+            await Task.Delay(5000);
+            CallGC();
+            if (firstStartupGC)
+            {
+                firstStartupGC = false;
+                _ = StartupGC();
+            }
+        }
+
     }
 }
