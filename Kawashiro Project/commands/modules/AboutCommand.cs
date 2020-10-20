@@ -52,8 +52,6 @@ namespace Kawashiro_Project.commands.modules
 			.Build();
 
 			await Context.Channel.SendMessageAsync(null, embed: embedSingleton).ConfigureAwait(false);
-
 		}
-
     }
 }
